@@ -151,35 +151,42 @@ int updateVariableId(char *dest, char *source)
     return 0;
 }
 
-// int printTable()
-// {
-//     printf("\n\nSymbol table:\n");
-//     for (int i = 0; i < variableCount; i++)
-//     {
-//         for (int j = symbolTable[i].blockDepth; j > 1; j--)
-//         {
-//             printf("\t");
-//         }
-//         if (strcmp(symbolTable[i].symbolType, "int") == 0)
-//         {
-//             printf("%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
-//         }
-//         else if (strcmp(symbolTable[i].symbolType, "char") == 0)
-//         {
-//             printf("%s %s %c\n", symbolTable[i].symbolType, symbolTable[i].symbolName, (char)symbolTable[i].value);
-//         }
-//         else if (strcmp(symbolTable[i].symbolType, "string") == 0)
-//         {
-//             printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].symbolStringvalue);
-//         }
-//     }
+int printTable()
+{
+    int vizitat[100];
 
-//     printf("\n");
-//     for (int i = 0; i < functionIndex; i++)
-//     {
-//         printf("%s\n", symTableFct[i].signature);
-//     }
-// }
+    for (int i = 0; i < variableCount; i++)
+    {
+        vizitat[i] = 0;
+    }
+
+    printf("\n\nSymbol table:\n");
+
+    for(int i = 0; i < variableCount; i++){
+        if(!vizitat[i]){
+            char thisRefference[100];
+            int thisScope = symbolTable[i].scope;
+            strcpy(thisRefference, symbolTable[i].reference);
+            for(int j = 0; j < variableCount; j++){
+                if(!vizitat[j]){
+                    if(symbolTable[j].scope == thisScope && !strcmp(symbolTable[j].reference, thisRefference)){
+                        vizitat[j] = 1;
+                        for(int k = symbolTable[j].scope; k > 1; k--){
+                            printf("\t");
+                        }
+                        printf("%s %s %d", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\n");
+    for (int i = 0; i < functionIndex; i++)
+    {
+        printf("%s\n", symTableFct[i].signature);
+    }
+}
 
 // void write()
 // {
