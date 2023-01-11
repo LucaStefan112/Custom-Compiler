@@ -5,7 +5,7 @@
 
 struct SymbolTableBlock
 {
-    char *simbolStringValue;
+    char *symbolStringValue;
     int blockDepth;
     int blockNr;
     int scope;
@@ -91,7 +91,7 @@ int insert_string(char *SCOPE, char *type, char *id, char *Val)
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);
 
-    symbolTable[variableCount].simbolStringValue = strdup(Val);
+    symbolTable[variableCount].symbolStringValue = strdup(Val);
     variableCount++;
 
     if (variableCount == 100)
@@ -211,17 +211,17 @@ int printTable()
         {
             printf("\t");
         }
-        if (strcmp(simbolTable[i].symbolType, "int") == 0)
+        if (strcmp(symbolTable[i].symbolType, "int") == 0)
         {
             printf("%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].Value);
         }
-        else if (strcmp(simbolTable[i].symbolType, "char") == 0)
+        else if (strcmp(symbolTable[i].symbolType, "char") == 0)
         {
             printf("%s %s %c\n", symbolTable[i].symbolType, symbolTable[i].symbolName, (char)symbolTable[i].Value);
         }
-        else if (strcmp(simbolTable[i].symbolType, "string") == 0)
+        else if (strcmp(symbolTable[i].symbolType, "string") == 0)
         {
-            printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].simbolStringValue);
+            printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].symbolStringValue);
         }
     }
 

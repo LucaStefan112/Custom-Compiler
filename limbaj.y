@@ -65,7 +65,7 @@ atribute  : DECL INTTYPE ID EQ NR'.' {insert($1,$2,$3,$5);}
           | DECL CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $3, $5);}
           | DECL CHARTYPE ID'.'        {insert($1, $2, $3, -1);}
           | DECL STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, $3, $5);}
-          | DECL STRINGTYPE ID'.'{insert($1, $2, $3, "");}
+          | DECL STRINGTYPE ID'.'{insert_string($1, $2, $3, "");}
           | DECL BOOLTYPE ID EQ TRUE'.'{insert($1, $2, $3, 1);}
           | DECL BOOLTYPE ID EQ FALSE'.'{insert($1, $2, $3, 0);}
           | DECL BOOLTYPE ID'.'{insert($1,$2,$3,-1);}
@@ -82,7 +82,7 @@ atribute  : DECL INTTYPE ID EQ NR'.' {insert($1,$2,$3,$5);}
           | ODECL CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $3, $5);}
           | ODECL CHARTYPE ID'.'{insert($1, $2, $3, -1);}
           | ODECL STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, $3, $5);}
-          | ODECL STRINGTYPE ID'.'{insert($1, $2, $3, "");}
+          | ODECL STRINGTYPE ID'.'{insert_string($1, $2, $3, "");}
           | ODECL BOOLTYPE ID EQ TRUE'.'{insert($1, $2, $3, 1);}
           | ODECL BOOLTYPE ID EQ FALSE'.'{insert($1, $2, $3, 0);}
           | ODECL BOOLTYPE ID'.' {insert($1,$2,$3,-1);}
