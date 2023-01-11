@@ -174,7 +174,7 @@ int printTable()
                         for(int k = symbolTable[j].scope; k > 1; k--){
                             printf("\t");
                         }
-                        printf("%s %s %d", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                        printf("%s %s %d\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
                     }
                 }
             }
