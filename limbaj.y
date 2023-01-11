@@ -52,7 +52,7 @@ globals   : globals variable
           ;
 
 variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
-          | INTTYPE ID'.'                    { insert($1, $2, 0); }
+          | INTTYPE ID'.'                    {  }
           | CHARTYPE ID  EQ CHARVAL'.'       { insert($1, $2, $4); }
           | CHARTYPE ID'.'                   { insert($1, $2, 0); }
           | STRINGTYPE ID  EQ STRINGVAL'.'   { insert($1, $2, -1); }
