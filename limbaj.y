@@ -125,6 +125,7 @@ function  : DECLF INTTYPE ID depthAdd functionBody { insertIntoFunctionsignature
           ;
 
 functionBody   : '(' declInstructions ')' body
+               | '(' ')' body
                ;
 
 callInstructions    : callInstructions ',' callInstruction
