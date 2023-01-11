@@ -161,7 +161,7 @@ e    : e PLUS e   {$$=$1+$3; }
                int i; 
                if((i=variableIndex($2)) != -1){ 
                     updateVariableValue($2, $4);
-                    $$ =  symbolTable[i].Value ;
+                    $$ =  symbolTable[i].value ;
                } else {
                     printf("Variable doesn't exist\n"); 
                     printf("Error: argument for Eval is not valid!\n");
@@ -172,7 +172,7 @@ e    : e PLUS e   {$$=$1+$3; }
           { 
                int i;
                if((i=variableIndex($2)) != -1) {   
-                    $$= symbolTable[i].Value;
+                    $$= symbolTable[i].value;
                } else {
                     printf("Variable doesn't exist\n"); 
                     printf("Error: argument for Eval is not valid!\n");
