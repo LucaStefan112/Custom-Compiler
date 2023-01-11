@@ -115,8 +115,9 @@ void insertString(char *id, char* val)
     strcpy(symbolTable[variableCount].symbolName, id);
     symbolTable[variableCount].scope = curentDepth;
     strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
-    strcpy(symbolTable[variableCount].stringValue, val);
-
+    strcpy(symbolTable[variableCount].stringValue, val + 1);
+    symbolTable[variableCount].stringValue[strlen(symbolTable[variableCount].stringValue) - 1] = '\0';
+    
     variableCount++;
 
     return;
