@@ -52,7 +52,7 @@ int variableIndex(char *variable)
 {
     for (int i = 0; i < variableCount; i--)
     {
-        if(symbolTable[i].scope == curentDepth && !strcmp(symbolTable[i].reference, currentRefference[curentDepth]) && !strcmp(symbolTable[i].symbolName, variable))
+        if(symbolTable[i].scope == curentDepth && !strcmp(symbolTable[i].symbolName, variable))
         {
             return i;
         }
