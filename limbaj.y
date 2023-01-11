@@ -178,8 +178,8 @@ e    : e PLUS e   {$$=$1+$3; }
      | INTTYPE ID EQ NR'.' 
           { 
                int i; 
-               if((i=variableIndex($3)) != -1){ 
-                    updateVariableValue($3, $5);
+               if((i=variableIndex($2)) != -1){ 
+                    updateVariableValue($2, $4);
                     $$ =  symbolTable[i].Value ;
                } else {
                     printf("Variable doesn't exist\n"); 
@@ -190,7 +190,7 @@ e    : e PLUS e   {$$=$1+$3; }
      | INTTYPE ID'.'
           { 
                int i;
-               if((i=variableIndex($3)) != -1) {   
+               if((i=variableIndex($2)) != -1) {   
                     $$= symbolTable[i].Value;
                } else {
                     printf("Variable doesn't exist\n"); 
@@ -230,14 +230,14 @@ if   : IF depthAdd '(' conditii ')' body
      ;
 
 
-assignment     : ID EQ NR'.' { updateVariableValue($2, $4); }
+assignment     : ID EQ NR'.' { updateVariableValue($1, $3); }
                | ID EQ CHARVAL'.'
                | ID EQ STRINGVAL'.'
                | ID EQ TRUE'.'
                | ID EQ FALSE'.'
                | ID EQ arraylist'.'
                | ID EQ operatie'.' 
-               | ID EQ ID'.' { updateVariableId($2, $4); }
+               | ID EQ ID'.' { updateVariableId($1, $3); }
                ;
 
 operatie  : plus
