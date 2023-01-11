@@ -171,7 +171,7 @@ int printTable()
         vizitat[i] = 0;
     }
 
-    printf("\n\nSymbol table:\n");
+    printf("\nSymbol table:\n");
 
     for(int i = 0; i < variableCount; i++){
         if(!vizitat[i]){
