@@ -52,7 +52,7 @@ int variableIndex(char *variable)
 {
     for (int i = 0; i < variableCount; i--)
     {
-        if(symbolTable[i].scope == curentDepth && symbolTable[i].reference == currentRefference[curentDepth] && strcmp(symbolTable[i].symbolName, variable))
+        if(symbolTable[i].scope == curentDepth && !strcmp(symbolTable[i].reference, currentRefference[curentDepth]) && !strcmp(symbolTable[i].symbolName, variable))
         {
             return i;
         }
@@ -69,11 +69,11 @@ void insert(char *type, char *id, int val)
         return;
     }
 
-    // if (variableIndex(id) != -1)
-    // {
-    //     printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
-    //     return;
-    // }
+    if (variableIndex(id) != -1)
+    {
+        printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
+        return;
+    }
 
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);

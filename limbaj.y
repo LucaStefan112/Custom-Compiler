@@ -33,7 +33,7 @@ extern char* yytext;
 %left MUL DIV
 %%
 
-s: progr {printf ("\n Language is syntactically correct.\n"); /*printTable(); write();*/}
+s: progr {printf ("\n Language is syntactically correct.\n"); initialize(); /*printTable(); write();*/}
 
 progr     : declarations functions
           ;
