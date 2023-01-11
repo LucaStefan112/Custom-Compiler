@@ -1,0 +1,373 @@
+LucaStefan112
+#4456
+
+LucaStefan112 — 05/26/2022 6:03 PM
+oftatul ala:))
+Rares Birladeanu — 05/26/2022 6:08 PM
+=))))
+ofofofofof
+Rares Birladeanu — 10/24/2022 10:01 PM
+when u redy
+Rares Birladeanu
+ started a call that lasted 38 minutes.
+ — 10/24/2022 10:01 PM
+Rares Birladeanu — 10/24/2022 10:32 PM
+`
+LucaStefan112 — 10/24/2022 10:35 PM
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+int main(){
+
+
+    char message[200];
+    int bufferSize;
+
+    printf("Astept server...\n");
+
+    int serverInput = open("SERVER_INPUT", O_WRONLY);
+    int serverOutput = open("SERVER_OUTPUT", O_RDONLY);
+
+    printf("M-am conectat!\n");
+
+    while(1){
+        printf(">");
+        fgets(message, sizeof(message), stdin);
+
+        bufferSize = strlen(message) - 1;
+        message[bufferSize] = 0;
+
+        write(serverInput, &bufferSize, sizeof(bufferSize));
+        write(serverInput, message, bufferSize);
+
+        read(serverOutput, &bufferSize, sizeof(bufferSize));
+        read(serverOutput, message, bufferSize);
+
+        message[bufferSize] = 0;
+        printf("%s\n", message);
+    }
+
+    close(serverInput);
+    close(serverOutput);
+
+    return 0;
+}
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+int main(){
+
+    mkfifo("SERVER_INPUT", 0666);
+    mkfifo("SERVER_OUTPUT", 0666);
+
+    printf("Astept client...\n");
+
+    int serverInput = open("SERVER_INPUT", O_RDONLY);
+    int serverOutput = open("SERVER_OUTPUT", O_WRONLY);
+
+    printf("M-am conectat!\n");
+
+    char message[100];
+    int bufferSize;
+
+    while(1){
+        read(serverInput, &bufferSize, sizeof(bufferSize));
+        read(serverInput, message, bufferSize);
+
+        message[bufferSize] = 0;
+
+        printf("%s\n", message);
+        printf(">");
+
+        fgets(message, sizeof(message), stdin);
+        bufferSize = strlen(message) - 1;
+        message[bufferSize] = 0;
+
+        write(serverOutput, &bufferSize, sizeof(bufferSize));
+        write(serverOutput, message, bufferSize);
+    }
+
+    close(serverInput);
+    close(serverOutput);
+
+    return 0;
+}
+LucaStefan112 — 12/21/2022 9:59 AM
+sup
+Rares Birladeanu — 12/21/2022 10:00 AM
+Ye
+Mă duc rapid sa îmi pun o cafea
+LucaStefan112 — 12/21/2022 10:00 AM
+sure, suna cand poti
+Rares Birladeanu
+ started a call that lasted 3 hours.
+ — 12/21/2022 10:09 AM
+LucaStefan112 — 12/21/2022 10:12 AM
+https://github.com/AnjaneyaTripathi/c-compiler
+GitHub
+GitHub - AnjaneyaTripathi/c-compiler: A compiler that accepts any v...
+A compiler that accepts any valid program written in C. It is made using Lex and Yacc. Returns a symbol table, parse tree, annotated syntax tree and intermediate code. - GitHub - AnjaneyaTripathi/c...
+GitHub - AnjaneyaTripathi/c-compiler: A compiler that accepts any v...
+LucaStefan112 — 12/21/2022 10:29 AM
+ma duc si eu sa imi fac un ceai daca e, revin imd
+done
+Rares Birladeanu — 12/21/2022 11:26 AM
+  flex ex1_lab2.l
+    bison -d ex1.y
+    gcc ./lex.yy.c ./ex1.tab.c
+    ./a.out
+Rares Birladeanu — 12/21/2022 12:18 PM
+%option noyywrap
+LucaStefan112 — 12/21/2022 2:01 PM
+im on
+Rares Birladeanu
+ started a call that lasted 2 hours.
+ — 12/21/2022 2:03 PM
+Rares Birladeanu
+ started a call that lasted 2 hours.
+ — 12/29/2022 11:58 AM
+Rares Birladeanu — 12/29/2022 11:59 AM
+https://github.com/Saranoja/ZeN_Compiler
+GitHub
+GitHub - Saranoja/ZeN_Compiler: Minimal Compiler which does the syn...
+Minimal Compiler which does the syntactic analysis of an original programming language (ZeN) and prints out several arithmetic operations&#39; results by semantic analysis. Creates the symbol t...
+GitHub - Saranoja/ZeN_Compiler: Minimal Compiler which does the syn...
+Attachment file type: unknown
+language.y
+1.90 KB
+Attachment file type: unknown
+language.l
+638 bytes
+Rares Birladeanu
+ started a call that lasted 41 minutes.
+ — 01/05/2023 1:49 PM
+Rares Birladeanu
+ started a call.
+ — Today at 9:31 PM
+Rares Birladeanu — Today at 9:43 PM
+Attachment file type: unknown
+limbaj.y
+8.50 KB
+Attachment file type: unknown
+limbaj.l
+2.09 KB
+#structure struct a 
+{
+   attribute int valoare.
+   attribute string nume = "RRadu".
+   attribute bool flag.
+   attribute int valoare.
+   attribute char c = 'c'.
+   attribute array arr1 = [].
+   attribute array arr2 = [12, "cuvant", iden].
+}
+
+#function char functie1 ( int argument1, char arg2)
+{
+    
+}
+
+#function string olariu( string argument1, int n, int a, string k)
+{
+  #function_call Eval (6 - 10 * 5 / 5 ) 
+}
+
+
+#function_call functie2(int a)
+
+#function string functie2(string argument1, int n)
+{
+   
+   #function_call olariu(string banana, int cve, char fgn)
+   #function_call olariu (char v, int tema, string cv)
+   #function_call abracadabra(int a)
+   function_member int nr.
+   function_member nr = 50.
+   function_member int smth = 10.
+   #function_call Eval (function_member int nr = 9. - function_member int smth = 18. )
+
+}
+
+#function_call functie2(int a)
+
+#function int functie (int a, string dar)
+{
+   #function_call functie2 (string one)
+}
+
+#function int functie2 (int a, string q)
+{
+   #function_call olariu( string argument1, int n, int a, string k)
+}
+
+#function_call int functie2 (int a, string b)
+{
+}
+
+#function int functie2 (int a, bool b)
+{
+}
+
+#function int functie4 (int a)
+{
+   function_member int k.
+   function_member int k.
+   function_member int a = 5.
+   function_member abc = 6.
+   function_member b = 12 + a.
+  
+   function_member string nume = "RRadu".
+
+    if ( a < 5 || true )
+    {
+
+      function_member int a.
+      function_member int b.
+    
+      function_member int abc.
+
+      function_member string str1 = "cuvant1".
+      function_member string str2 = "cuvant2".
+      function_member string str3.
+      function_member str3 = str1 + str2.
+
+      function_member abc = 123.
+
+      function_member int i.
+
+      function_member int Inaintedefor.
+
+        if ( false && abc == 3 )
+        {
+            for ( function_member i = 2. i <= 10 . function_member i = i + 1. )
+            {
+              
+               function_member a = a * 2.
+           }
+       }
+       else
+        {
+            while( a >= 2 )
+            {
+               function_member a = a + 1.
+            }
+... (4 lines left)
+Collapse
+input.txt
+3 KB
+﻿
+#structure struct a 
+{
+   attribute int valoare.
+   attribute string nume = "RRadu".
+   attribute bool flag.
+   attribute int valoare.
+   attribute char c = 'c'.
+   attribute array arr1 = [].
+   attribute array arr2 = [12, "cuvant", iden].
+}
+
+#function char functie1 ( int argument1, char arg2)
+{
+    
+}
+
+#function string olariu( string argument1, int n, int a, string k)
+{
+  #function_call Eval (6 - 10 * 5 / 5 ) 
+}
+
+
+#function_call functie2(int a)
+
+#function string functie2(string argument1, int n)
+{
+   
+   #function_call olariu(string banana, int cve, char fgn)
+   #function_call olariu (char v, int tema, string cv)
+   #function_call abracadabra(int a)
+   function_member int nr.
+   function_member nr = 50.
+   function_member int smth = 10.
+   #function_call Eval (function_member int nr = 9. - function_member int smth = 18. )
+
+}
+
+#function_call functie2(int a)
+
+#function int functie (int a, string dar)
+{
+   #function_call functie2 (string one)
+}
+
+#function int functie2 (int a, string q)
+{
+   #function_call olariu( string argument1, int n, int a, string k)
+}
+
+#function_call int functie2 (int a, string b)
+{
+}
+
+#function int functie2 (int a, bool b)
+{
+}
+
+#function int functie4 (int a)
+{
+   function_member int k.
+   function_member int k.
+   function_member int a = 5.
+   function_member abc = 6.
+   function_member b = 12 + a.
+  
+   function_member string nume = "RRadu".
+
+    if ( a < 5 || true )
+    {
+
+      function_member int a.
+      function_member int b.
+    
+      function_member int abc.
+
+      function_member string str1 = "cuvant1".
+      function_member string str2 = "cuvant2".
+      function_member string str3.
+      function_member str3 = str1 + str2.
+
+      function_member abc = 123.
+
+      function_member int i.
+
+      function_member int Inaintedefor.
+
+        if ( false && abc == 3 )
+        {
+            for ( function_member i = 2. i <= 10 . function_member i = i + 1. )
+            {
+              
+               function_member a = a * 2.
+           }
+       }
+       else
+        {
+            while( a >= 2 )
+            {
+               function_member a = a + 1.
+            }
+       }
+  }
+}
+input.txt
+3 KB
