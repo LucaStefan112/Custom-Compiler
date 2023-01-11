@@ -25,7 +25,6 @@ extern char* yytext;
 %token <charVal> CHARVAL
 %token <stringVal> STRINGVAL
 %token <strVal> ID
-%token <key>  DECL ODECL
 
 %type <intVal> exp e 
 
@@ -42,9 +41,27 @@ progr     : declarations functions
 depthAdd  : { increaseDepth(); }
           ;
 
-declarations   : structures
+declarations   : structures globals
+               | structures
+               | globals
                |
                ;
+
+globals   : globals global
+          | global
+          ;
+
+global    : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
+          | INTTYPE ID'.'                    { insert($1, $2, 0); }
+          | CHARTYPE ID  EQ CHARVAL'.'       { insert($1, $2, $4); }
+          | CHARTYPE ID'.'                   { insert($1, $2, 0); }
+          | STRINGTYPE ID  EQ STRINGVAL'.'   { insert($1, $2, -1); }
+          | STRINGTYPE ID'.'                 { insert($1, $2, -1); }
+          | BOOLTYPE ID EQ TRUE'.'           { insert($1, $2, 1); }
+          | BOOLTYPE ID EQ FALSE'.'          { insert($1, $2, 0); }
+          | BOOLTYPE ID'.'                   { insert($1, $2, 0); }
+          | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }
+          | ID ID'.'                         { insert($1, $2, 0); }
 
 structures     : structures structure
                | structure
@@ -61,16 +78,16 @@ atributelist   : atributelist atribute
                | atribute
                ;
 
-atribute  : DECL INTTYPE ID EQ NR'.' {insert($1,$2,$3,$5);}
-          | DECL INTTYPE ID'.'       {insert($1, $2, $3, 2147483647);}
-          | DECL CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $3, $5);}
-          | DECL CHARTYPE ID'.'        {insert($1, $2, $3, -1);}
-          | DECL STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, $3, $5);}
-          | DECL STRINGTYPE ID'.'{insert_string($1, $2, $3, "");}
-          | DECL BOOLTYPE ID EQ TRUE'.'{insert($1, $2, $3, 1);}
-          | DECL BOOLTYPE ID EQ FALSE'.'{insert($1, $2, $3, 0);}
-          | DECL BOOLTYPE ID'.'{insert($1,$2,$3,-1);}
-          | DECL ARRAYTYPE ID EQ arraylist'.'{insert($1, $2, $3, -1);}
+atribute  : INTTYPE ID EQ NR'.' {insert($1,$2,$3,$5);}
+          | INTTYPE ID'.'       {insert($1, $2, $3, 2147483647);}
+          | CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $3, $5);}
+          | CHARTYPE ID'.'        {insert($1, $2, $3, -1);}
+          | STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, $3, $5);}
+          | STRINGTYPE ID'.'{insert_string($1, $2, $3, "");}
+          | BOOLTYPE ID EQ TRUE'.'{insert($1, $2, $3, 1);}
+          | BOOLTYPE ID EQ FALSE'.'{insert($1, $2, $3, 0);}
+          | BOOLTYPE ID'.'{insert($1,$2,$3,-1);}
+          | ARRAYTYPE ID EQ arraylist'.'{insert($1, $2, $3, -1);}
           | FCALL  EVAL '(' exp ')'
           | FCALL ID '(' callInstructions ')'  
                {    
@@ -78,17 +95,17 @@ atribute  : DECL INTTYPE ID EQ NR'.' {insert($1,$2,$3,$5);}
                          if (checkIdentity($2)==0)
                               printf("The types of the called function do not match with the declared types for %s \n", $2);
                }
-          | ODECL INTTYPE ID EQ NR'.' {insert($1, $2, $3, $5);}
-          | ODECL INTTYPE ID'.'{insert($1, $2, $3, 2147483647);}
-          | ODECL CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $3, $5);}
-          | ODECL CHARTYPE ID'.'{insert($1, $2, $3, -1);}
-          | ODECL STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, $3, $5);}
-          | ODECL STRINGTYPE ID'.'{insert_string($1, $2, $3, "");}
-          | ODECL BOOLTYPE ID EQ TRUE'.'{insert($1, $2, $3, 1);}
-          | ODECL BOOLTYPE ID EQ FALSE'.'{insert($1, $2, $3, 0);}
-          | ODECL BOOLTYPE ID'.' {insert($1,$2,$3,-1);}
-          | ODECL ARRAYTYPE ID EQ arraylist'.'{insert($1, $2, $3, -1);}
-          | ODECL INTTYPE EVAL '(' exp ')'
+          | INTTYPE ID EQ NR'.' {insert($1, $2, $3, $5);}
+          | INTTYPE ID'.'{insert($1, $2, $3, 2147483647);}
+          | CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $3, $5);}
+          | CHARTYPE ID'.'{insert($1, $2, $3, -1);}
+          | STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, $3, $5);}
+          | STRINGTYPE ID'.'{insert_string($1, $2, $3, "");}
+          | BOOLTYPE ID EQ TRUE'.'{insert($1, $2, $3, 1);}
+          | BOOLTYPE ID EQ FALSE'.'{insert($1, $2, $3, 0);}
+          | BOOLTYPE ID'.' {insert($1,$2,$3,-1);}
+          | ARRAYTYPE ID EQ arraylist'.'{insert($1, $2, $3, -1);}
+          | INTTYPE EVAL '(' exp ')'
           ;
 
 arraylist : '['']'
@@ -158,7 +175,7 @@ e    : e PLUS e   {$$=$1+$3; }
      | e MUL e   {$$=$1*$3; }
      | e DIV e   {$$=$1/$3; }
      | NR {$$=$1; }
-     | DECL INTTYPE ID EQ NR'.' 
+     | INTTYPE ID EQ NR'.' 
           { 
                int i; 
                if((i=variableIndex($3)) != -1){ 
@@ -170,7 +187,7 @@ e    : e PLUS e   {$$=$1+$3; }
                     exit(0);
                }
           }
-     | DECL INTTYPE ID'.'
+     | INTTYPE ID'.'
           { 
                int i;
                if((i=variableIndex($3)) != -1) {   

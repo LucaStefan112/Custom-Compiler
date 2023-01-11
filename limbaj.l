@@ -20,8 +20,6 @@
 "*"                         { return MUL; }
 "&&"                        { return LOGICALAND; }
 "||"                        { return LOGICALOR; }
-"function_member"           { yylval.key = strdup(yytext);return DECL; }
-"attribute"                 { yylval.key = strdup(yytext);return ODECL; }
 "#function"                 { return DECLF; }
 "#function_call"            { return FCALL; }
 "#structure"                { return STRUCTCALL; }

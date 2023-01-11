@@ -5,14 +5,15 @@
 
 struct SymbolTableBlock
 {
-    char *symbolStringValue;
-    int blockDepth;
-    int blockNr;
+    char symbolType[100];
+    char symbolName[100];
     int scope;
-    char symbolType[50];
-    char symbolName[50];
-    int Value;
+    char reference[100];
+    char symbolStringValue[100];
+    int value;
 } symbolTable[100];
+
+char currentRefference[100][100];
 
 struct Function
 {
@@ -31,7 +32,11 @@ int variableCount = 0, paramCount = 0, userCount = 0, userCallCount = 0, nameInd
 
 char functionSignature[300], temp[100];
 
-int blockDepthCount[100], curentDepth = 1, functionIndex = 0;
+int blockDepthCount[100], curentDepth = 0, functionIndex = 0;
+
+void initialize(){
+    strcpy(currentRefference[0], "global");
+}
 
 void increaseDepth()
 {
@@ -45,20 +50,9 @@ void decreaseDepth()
 
 int variableIndex(char *variable)
 {
-    int blockCount = blockDepthCount[curentDepth - 1];
-    int lookupDepth = curentDepth;
-
-    for (int i = variableCount - 1; i >= 0; i--)
+    for (int i = 0; i < variableCount; i--)
     {
-        if (symbolTable[i].blockDepth < lookupDepth)
-        {
-            lookupDepth = symbolTable[i].blockDepth;
-            blockCount = symbolTable[i].blockNr;
-        }
-        else if (
-            symbolTable[i].blockDepth == lookupDepth &&
-            symbolTable[i].blockNr == blockCount &&
-            strcmp(symbolTable[i].symbolName, variable) == 0)
+        if(symbolTable[i].scope == curentDepth && symbolTable[i].reference == currentRefference[curentDepth] && strcmp(symbolTable[i].symbolName, variable))
         {
             return i;
         }
@@ -67,74 +61,29 @@ int variableIndex(char *variable)
     return -1;
 }
 
-int insert_string(char *SCOPE, char *type, char *id, char *Val)
+void insert(char *type, char *id, int val)
 {
-    printf("hello");
+    if (variableCount == 100)
+    {
+        printf("MAXIMUM VARIABLE NUMBER\n");
+        return;
+    }
+
     if (variableIndex(id) != -1)
     {
         printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
-        return 0;
-    }
-
-    symbolTable[variableCount].blockDepth = curentDepth;
-    symbolTable[variableCount].blockNr = blockDepthCount[curentDepth - 1];
-
-    if (strcmp(SCOPE, "Fprepare") == 0)
-    {
-        symbolTable[variableCount].scope = 0;
-    }
-    else if (strcmp(SCOPE, "Oprepare") == 0)
-    {
-        symbolTable[variableCount].scope = 1;
+        return;
     }
 
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);
-
-    symbolTable[variableCount].symbolStringValue = strdup(Val);
+    symbolTable[variableCount].scope = curentDepth;
+    strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
+    symbolTable[variableCount].value = val;
+    
     variableCount++;
 
-    if (variableCount == 100)
-    {
-        printf("MAXIMUM VARIABLE NUMBER\n");
-    }
-
-    return 0;
-}
-
-int insert(char *SCOPE, char *type, char *id, int Val)
-{
-    printf("%d",Val);
-    if (variableIndex(id) != -1)
-    {
-        printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
-        return 0;
-    }
-
-    symbolTable[variableCount].blockDepth = curentDepth;
-    symbolTable[variableCount].blockNr = blockDepthCount[curentDepth - 1];
-
-    if (strcmp(SCOPE, "Fprepare") == 0)
-    {
-        symbolTable[variableCount].scope = 0;
-    }
-    else if (strcmp(SCOPE, "Oprepare") == 0)
-    {
-        symbolTable[variableCount].scope = 1;
-    }
-
-    strcpy(symbolTable[variableCount].symbolType, type);
-    strcpy(symbolTable[variableCount].symbolName, id);
-
-    symbolTable[variableCount].Value = Val;
-    variableCount++;
-
-    if (variableCount == 100)
-    {
-        printf("MAXIMUM VARIABLE NUMBER\n");
-    }
-
-    return 0;
+    return;
 }
 
 int checkDeclaration(char *id)
@@ -151,7 +100,7 @@ int checkDeclaration(char *id)
         printf("VARIABLE %s IS NOT INTEGER\n", id);
         return -1;
 
-        if (symbolTable[idIndex].Value == INT_MAX)
+        if (symbolTable[idIndex].value == INT_MAX)
         {
             printf("VARIABLE %s HAS NOT BEEN INITIALIZED\n", id);
             return -1;
@@ -170,7 +119,7 @@ int updateVariableValue(char *dest, int source)
         return -1;
     }
 
-    symbolTable[destIndex].Value = source;
+    symbolTable[destIndex].value = source;
 
     return 0;
 }
@@ -190,14 +139,14 @@ int updateVariableId(char *dest, char *source)
         printf("VARIABLE %s IS NOT INTEGER\n", dest);
         return -1;
 
-        if (symbolTable[sourceIndex].Value == INT_MAX)
+        if (symbolTable[sourceIndex].value == INT_MAX)
         {
             printf("VARIABLE %s HAS NOT BEEN INITIALIZED\n", dest);
             return -1;
         }
     }
 
-    symbolTable[destIndex].Value = symbolTable[sourceIndex].Value;
+    symbolTable[destIndex].value = symbolTable[sourceIndex].value;
 
     return 0;
 }
@@ -213,15 +162,15 @@ int printTable()
         }
         if (strcmp(symbolTable[i].symbolType, "int") == 0)
         {
-            printf("%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].Value);
+            printf("%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
         }
         else if (strcmp(symbolTable[i].symbolType, "char") == 0)
         {
-            printf("%s %s %c\n", symbolTable[i].symbolType, symbolTable[i].symbolName, (char)symbolTable[i].Value);
+            printf("%s %s %c\n", symbolTable[i].symbolType, symbolTable[i].symbolName, (char)symbolTable[i].value);
         }
         else if (strcmp(symbolTable[i].symbolType, "string") == 0)
         {
-            printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].symbolStringValue);
+            printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].symbolStringvalue);
         }
     }
 
@@ -243,7 +192,7 @@ void write()
         {
             fprintf(f, "\t");
         }
-        fprintf(f, "%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].Value);
+        fprintf(f, "%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
     }
 
     fprintf(f, "\n");
