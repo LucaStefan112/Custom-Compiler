@@ -19,7 +19,7 @@ extern char* yytext;
   char *stringVal;
 }
 
-%token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ STRUCTCALL OBJTYPE
+%token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ STRUCTCALL STRUCTTYPE
 %token <dataType> INTTYPE BOOLTYPE STRINGTYPE ARRAYTYPE  CHARTYPE
 %token <intVal> NR
 %token <charVal> CHARVAL
@@ -36,25 +36,26 @@ extern char* yytext;
 
 s: progr {printf ("\n Language is syntactically correct.\n"); printTable(); write();}
 
-progr : declarations functions
+progr     : declarations functions
+          ;
 
 depthAdd  : { increaseDepth(); }
           ;
 
-declarations : objects
+declarations   : structures
                |
                ;
 
-objects   : objects object
-          | object
-          ;
+structures     : structures structure
+               | structure
+               ;
 
-object    : STRUCTCALL depthAdd OBJTYPE ID LBRACKET  atributelist objEnd 
-          | STRUCTCALL depthAdd OBJTYPE ID LBRACKET objEnd
-          ;
+structure      : STRUCTCALL depthAdd STRUCTTYPE ID LBRACKET  atributelist structEnd 
+               | STRUCTCALL depthAdd STRUCTTYPE ID LBRACKET structEnd
+               ;
 
-objEnd    : RBRACKET { decreaseDepth(); }
-          ;
+structEnd      : RBRACKET { decreaseDepth(); }
+               ;
 
 atributelist   : atributelist atribute
                | atribute
@@ -102,7 +103,7 @@ listval   : NR
           | CHARVAL
           | STRINGVAL
           | ID
-          | object
+          | structure
           | arraylist
           ;
 
@@ -110,9 +111,9 @@ functions : functions  function
           | function
           ;
 
-function  : DECLF INTTYPE ID    depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF CHARTYPE ID   depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF BOOLTYPE ID   depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+function  : DECLF INTTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF CHARTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF BOOLTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
           | DECLF STRINGTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
           | DECLF INTTYPE EVAL '(' exp ')'
           | FCALL ID '(' callInstructions')' 

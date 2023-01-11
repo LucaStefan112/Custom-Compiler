@@ -31,7 +31,7 @@
 "string"                    { yylval.dataType = strdup(yytext);return STRINGTYPE; }
 "bool"                      { yylval.dataType = strdup(yytext);return BOOLTYPE; }
 "array"                     { yylval.dataType = strdup(yytext);return ARRAYTYPE; }
-"struct"                    { yylval.dataType = strdup(yytext);return OBJTYPE;}
+"struct"                    { yylval.dataType = strdup(yytext);return STRUCTTYPE;}
 "{"                         { return LBRACKET; }
 "}"                         { return RBRACKET; }
 "true"                      { return TRUE; }
