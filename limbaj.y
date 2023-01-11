@@ -47,11 +47,11 @@ declarations   : structures globals
                |
                ;
 
-globals   : globals global
-          | global
+globals   : globals variable
+          | variable
           ;
 
-global    : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
+variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | INTTYPE ID'.'                    { insert($1, $2, 0); }
           | CHARTYPE ID  EQ CHARVAL'.'       { insert($1, $2, $4); }
           | CHARTYPE ID'.'                   { insert($1, $2, 0); }
@@ -74,20 +74,11 @@ structure      : STRUCTCALL depthAdd STRUCTTYPE ID LBRACKET  atributelist struct
 structEnd      : RBRACKET { decreaseDepth(); }
                ;
 
-atributelist   : atributelist atribute
-               | atribute
+atributelist   : atributelist variable
+               | variable
                ;
 
-atribute  : INTTYPE ID EQ NR'.' { insert($1,$2,$4); }
-          | INTTYPE ID'.'       { insert($1, $2, 0);}
-          | CHARTYPE ID  EQ CHARVAL'.'{ insert($1, $2, $4);}
-          | CHARTYPE ID'.'        {insert($1, $2, 0);}
-          | STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, 0);}
-          | STRINGTYPE ID'.'{insert_string($1, $2, 0);}
-          | BOOLTYPE ID EQ TRUE'.'{insert($1, $2, 1);}
-          | BOOLTYPE ID EQ FALSE'.'{insert($1, $2, 0);}
-          | BOOLTYPE ID'.'{insert($1,$2, 0);}
-          | ARRAYTYPE ID EQ arraylist'.'{insert($1, $2, 0);}
+atribute  : 
           | FCALL  EVAL '(' exp ')'
           | FCALL ID '(' callInstructions ')'  
                {    
@@ -95,16 +86,6 @@ atribute  : INTTYPE ID EQ NR'.' { insert($1,$2,$4); }
                          if (checkIdentity($2)==0)
                               printf("The types of the called function do not match with the declared types for %s \n", $2);
                }
-          | INTTYPE ID EQ NR'.' {insert($1, $2, $4);}
-          | INTTYPE ID'.'{insert($1, $2, 0);}
-          | CHARTYPE ID  EQ CHARVAL'.'{insert($1, $2, $4);}
-          | CHARTYPE ID'.'{insert($1, $2, 0);}
-          | STRINGTYPE ID  EQ STRINGVAL'.'{insert_string($1, $2, 0);}
-          | STRINGTYPE ID'.'{insert_string($1, $2, 0);}
-          | BOOLTYPE ID EQ TRUE'.'{insert($1, $2, 1);}
-          | BOOLTYPE ID EQ FALSE'.'{insert($1, $2, 0);}
-          | BOOLTYPE ID'.' {insert($1, $2, 0);}
-          | ARRAYTYPE ID EQ arraylist'.'{insert($1, $2, 0);}
           | INTTYPE EVAL '(' exp ')'
           ;
 
@@ -212,7 +193,7 @@ blockInstructions   : blockInstructions blockInstruction
                     | blockInstruction
                     ;
 
-blockInstruction    : atribute
+blockInstruction    : variable
                     | assignment
                     | while
                     | for
