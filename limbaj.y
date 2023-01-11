@@ -58,7 +58,9 @@ variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | BOOLTYPE ID EQ FALSE'.'          { insert($1, $2, 0); }
           | BOOLTYPE ID'.'                   { insert($1, $2, 0); }
           | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }
-          | ID ID'.'                         { insert($1, $2, 0); }
+          | structure                        
+          ;
+
 
 structures     : structures structure
                | structure
