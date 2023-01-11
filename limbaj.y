@@ -107,6 +107,7 @@ listval   : NR
 
 functions : functions  function
           | function
+          |
           ;
 
 function  : DECLF INTTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
