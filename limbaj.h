@@ -78,7 +78,7 @@ void insert(char *type, char *id, int val)
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);
     symbolTable[variableCount].scope = curentDepth;
-    strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
+    // strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
     symbolTable[variableCount].value = val;
 
     variableCount++;
