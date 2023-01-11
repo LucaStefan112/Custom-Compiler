@@ -192,6 +192,7 @@ blockInstruction    : variable
                     | while
                     | for
                     | if
+                    | if else
                     ;
 
 while     : WHILE { increaseDepth(); } '(' conditii ')' body
@@ -201,7 +202,9 @@ for  : FOR { increaseDepth(); } '(' assignment conditii '.' assignment ')' body
      ;
 
 if   : IF { increaseDepth(); } '(' conditii ')' body
-     | IF { increaseDepth(); } '(' conditii ')' body ELSE { increaseDepth(); } body
+     ;
+
+else : ELSE { increaseDepth(); } body
      ;
 
 
