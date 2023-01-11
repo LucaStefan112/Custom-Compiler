@@ -178,6 +178,9 @@ int printTable()
             char thisRefference[100];
             int thisScope = symbolTable[i].scope;
             strcpy(thisRefference, symbolTable[i].reference);
+            for(int k = 0; k < thisScope - 1; k++){
+                printf("\t");
+            }
             printf("%s:\n", thisRefference);
             for(int j = 0; j < variableCount; j++){
                 if(!vizitat[j]){
