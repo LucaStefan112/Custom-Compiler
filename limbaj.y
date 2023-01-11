@@ -201,14 +201,14 @@ else : ELSE { increaseDepth(); } body
      ;
 
 
-assignment     : ID EQ NR'.' { updateVariableValue($1, $3); }
-               | ID EQ CHARVAL'.'
-               | ID EQ STRINGVAL'.'
-               | ID EQ TRUE'.'
-               | ID EQ FALSE'.'
+assignment     : ID EQ NR'.'       { updateVariableValue($1, $3); }
+               | ID EQ CHARVAL'.'  { updateVariableValue($1, $3); }
+               | ID EQ STRINGVAL'.'{ updateVariableStringValue($1, $3); }
+               | ID EQ TRUE'.'     { updateVariableValue($1, 1); }
+               | ID EQ FALSE'.'    { updateVariableValue($1, 0); }
                | ID EQ arraylist'.'
                | ID EQ operatie'.' 
-               | ID EQ ID'.' { updateVariableId($1, $3); }
+               | ID EQ ID'.'       { updateVariableWithVariable($1, $3); }
                ;
 
 operatie  : plus

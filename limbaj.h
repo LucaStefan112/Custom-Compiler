@@ -117,7 +117,7 @@ void insertString(char *id, char* val)
     strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
     strcpy(symbolTable[variableCount].stringValue, val + 1);
     symbolTable[variableCount].stringValue[strlen(symbolTable[variableCount].stringValue) - 1] = '\0';
-    
+
     variableCount++;
 
     return;
@@ -146,19 +146,94 @@ int checkDeclaration(char *id)
     return 1;
 }
 
-int updateVariableValue(char *dest, int source)
+void updateVariableValue(char *dest, int value)
 {
-    int destIndex;
+    int destIndex = variableIndex(dest);
 
-    if ((destIndex = variableIndex(dest)) == -1)
+    if (destIndex == -1)
     {
         printf("VARIABLE %s DOES NOT EXIST\n", dest);
-        return -1;
+        return;
     }
 
-    symbolTable[destIndex].value = source;
+    if (strcmp(symbolTable[destIndex].symbolType, "string") == 0)
+    {
+        printf("CAN'T PASS VALUE %d TO STRING\n", value);
+        return;
+    }
 
-    return 0;
+    if(strcmp(symbolTable[destIndex].symbolType, "char") == 0) {
+        symbolTable[destIndex].value = abs(value) % 256;
+    } else if (strcmp(symbolTable[destIndex].symbolType, "bool") == 0) {
+        symbolTable[destIndex].value = value != 0 ? 1 : 0;
+    } else if (strcmp(symbolTable[destIndex].symbolType, "int") == 0) {
+        symbolTable[destIndex].value = value;
+    } else {
+        printf("VARIABLE %s IS NOT DEFAULT TYPE\n", dest);
+        return;
+    }
+
+    return;
+}
+
+void updateVariableStringValue(char *dest, char* value)
+{
+    int destIndex = variableIndex(dest);
+
+    if (destIndex == -1)
+    {
+        printf("VARIABLE %s DOES NOT EXIST\n", dest);
+        return;
+    }
+
+    if (strcmp(symbolTable[destIndex].symbolType, "string") != 0)
+    {
+        printf("CAN'T PASS STRING TO %s\n", symbolTable[destIndex].symbolType);
+        return;
+    }
+
+    strcpy(symbolTable[destIndex].stringValue, value + 1);
+    symbolTable[destIndex].stringValue[strlen(symbolTable[destIndex].stringValue) - 1] = '\0';
+
+    return;
+}
+
+void updateVariableWithVariable(char *dest, char* source)
+{
+    int destIndex = variableIndex(dest);
+    int sourceIndex = variableIndex(source);
+
+    if (destIndex == -1)
+    {
+        printf("VARIABLE %s DOES NOT EXIST\n", dest);
+        return;
+    }
+
+    if (sourceIndex == -1)
+    {
+        printf("VARIABLE %s DOES NOT EXIST\n", source);
+        return;
+    }
+
+    // check if source is string and dest is not or dest is string and source is not
+
+    if (strcmp(symbolTable[destIndex].symbolType, "string") == 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") != 0) {
+        printf("CAN'T PASS %s TO STRING\n", symbolTable[sourceIndex].symbolType);
+        return;
+    }
+
+    if (strcmp(symbolTable[destIndex].symbolType, "string") != 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") == 0) {
+        printf("CAN'T PASS STRING TO %s\n", symbolTable[destIndex].symbolType);
+        return;
+    }
+
+    if (strcmp(symbolTable[destIndex].symbolType, "string") == 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") == 0) {
+        strcpy(symbolTable[destIndex].stringValue, symbolTable[sourceIndex].stringValue);
+    } else {
+        symbolTable[destIndex].value = symbolTable[sourceIndex].value;
+    }
+
+    return;
 }
 
 int updateVariableId(char *dest, char *source)
