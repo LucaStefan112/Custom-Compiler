@@ -13,6 +13,7 @@ struct SymbolTableBlock
     int value;
 } symbolTable[100];
 
+int refferenceCount = 0;
 char currentRefference[100][100];
 
 struct Function
@@ -34,8 +35,18 @@ char functionSignature[300], temp[100];
 
 int blockDepthCount[100], curentDepth = 0, functionIndex = 0;
 
+void addRefference(char *refference)
+{
+    strcpy(currentRefference[refferenceCount++], refference);
+}
+
+void removeRefference()
+{
+    refferenceCount--;
+}
+
 void initialize(){
-    strcpy(currentRefference[0], "global");
+    strcpy(currentRefference[refferenceCount++], "global");
 }
 
 void increaseDepth()

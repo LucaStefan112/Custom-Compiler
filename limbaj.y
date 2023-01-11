@@ -19,7 +19,7 @@ extern char* yytext;
   char *stringVal;
 }
 
-%token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ STRUCTCALL STRUCTTYPE
+%token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ STRUCTCALL
 %token <dataType> INTTYPE BOOLTYPE STRINGTYPE ARRAYTYPE  CHARTYPE
 %token <intVal> NR
 %token <charVal> CHARVAL
@@ -36,9 +36,6 @@ extern char* yytext;
 s: { initialize(); } progr {printf ("\n Language is syntactically correct.\n"); printTable(); /*write();*/}
 
 progr     : declarations functions
-          ;
-
-depthAdd  : { increaseDepth(); }
           ;
 
 declarations   : structures globals
@@ -67,14 +64,10 @@ structures     : structures structure
                | structure
                ;
 
-structure      : STRUCTCALL depthAdd STRUCTTYPE ID LBRACKET  atributelist structEnd 
-               | STRUCTCALL depthAdd STRUCTTYPE ID LBRACKET structEnd
+structure      : STRUCTCALL ID { addReference($2); } LBRACKET { increaseDepth(); } variableList { decreaseDepth(); removeRefference(); } RBRACKET
                ;
 
-structEnd      : RBRACKET { decreaseDepth(); }
-               ;
-
-atributelist   : atributelist variable
+variableList   : variableList variable
                | variable
                ;
 
@@ -110,10 +103,10 @@ functions : functions  function
           |
           ;
 
-function  : DECLF INTTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF CHARTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF BOOLTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF STRINGTYPE ID depthAdd functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF CHARTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF BOOLTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF STRINGTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
           | DECLF INTTYPE EVAL '(' exp ')'
           | FCALL ID '(' callInstructions')' 
                {    
@@ -201,14 +194,14 @@ blockInstruction    : variable
                     | if
                     ;
 
-while     : WHILE depthAdd '(' conditii ')' body
+while     : WHILE { increaseDepth(); } '(' conditii ')' body
           ;
 
-for  : FOR depthAdd '(' assignment conditii '.' assignment ')' body
+for  : FOR { increaseDepth(); } '(' assignment conditii '.' assignment ')' body
      ;
 
-if   : IF depthAdd '(' conditii ')' body
-     | IF depthAdd '(' conditii ')' body ELSE depthAdd body
+if   : IF { increaseDepth(); } '(' conditii ')' body
+     | IF { increaseDepth(); } '(' conditii ')' body ELSE { increaseDepth(); } body
      ;
 
 
