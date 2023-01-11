@@ -64,7 +64,7 @@ structures     : structures structure
                | structure
                ;
 
-structure      : STRUCTCALL ID LBRACKET RBRACKET
+structure      : STRUCTCALL ID  LBRACKET { increaseDepth(); } variableList { decreaseDepth(); removeRefference(); } RBRACKET
                ;
 
 variableList   : variableList variable
