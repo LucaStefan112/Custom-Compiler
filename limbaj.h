@@ -190,7 +190,7 @@ int printTable()
                             printf("\t");
                         }
                         if(strcmp(symbolTable[j].symbolType, "char") == 0){
-                            printf("%s %s %c\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                            printf("%s %s '%c'\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
                         } else if (strcmp(symbolTable[j].symbolType, "int") == 0){
                             printf("%s %s %d\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
                         } else if (strcmp(symbolTable[j].symbolType, "string") == 0){
