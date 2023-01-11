@@ -80,7 +80,7 @@ void insert(char *type, char *id, int val)
     symbolTable[variableCount].scope = curentDepth;
     strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
     symbolTable[variableCount].value = val;
-    
+
     variableCount++;
 
     return;
@@ -151,60 +151,60 @@ int updateVariableId(char *dest, char *source)
     return 0;
 }
 
-int printTable()
-{
-    printf("\n\nSymbol table:\n");
-    for (int i = 0; i < variableCount; i++)
-    {
-        for (int j = symbolTable[i].blockDepth; j > 1; j--)
-        {
-            printf("\t");
-        }
-        if (strcmp(symbolTable[i].symbolType, "int") == 0)
-        {
-            printf("%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
-        }
-        else if (strcmp(symbolTable[i].symbolType, "char") == 0)
-        {
-            printf("%s %s %c\n", symbolTable[i].symbolType, symbolTable[i].symbolName, (char)symbolTable[i].value);
-        }
-        else if (strcmp(symbolTable[i].symbolType, "string") == 0)
-        {
-            printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].symbolStringvalue);
-        }
-    }
+// int printTable()
+// {
+//     printf("\n\nSymbol table:\n");
+//     for (int i = 0; i < variableCount; i++)
+//     {
+//         for (int j = symbolTable[i].blockDepth; j > 1; j--)
+//         {
+//             printf("\t");
+//         }
+//         if (strcmp(symbolTable[i].symbolType, "int") == 0)
+//         {
+//             printf("%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
+//         }
+//         else if (strcmp(symbolTable[i].symbolType, "char") == 0)
+//         {
+//             printf("%s %s %c\n", symbolTable[i].symbolType, symbolTable[i].symbolName, (char)symbolTable[i].value);
+//         }
+//         else if (strcmp(symbolTable[i].symbolType, "string") == 0)
+//         {
+//             printf("%s %s %s\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].symbolStringvalue);
+//         }
+//     }
 
-    printf("\n");
-    for (int i = 0; i < functionIndex; i++)
-    {
-        printf("%s\n", symTableFct[i].signature);
-    }
-}
+//     printf("\n");
+//     for (int i = 0; i < functionIndex; i++)
+//     {
+//         printf("%s\n", symTableFct[i].signature);
+//     }
+// }
 
-void write()
-{
-    FILE *f = fopen("symbol_table.txt", "w");
-    fprintf(f, "DECLARED VARIABLE:");
+// void write()
+// {
+//     FILE *f = fopen("symbol_table.txt", "w");
+//     fprintf(f, "DECLARED VARIABLE:");
 
-    for (int i = 0; i < variableCount; i++)
-    {
-        for (int j = symbolTable[i].blockDepth; j > 1; j--)
-        {
-            fprintf(f, "\t");
-        }
-        fprintf(f, "%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
-    }
+//     for (int i = 0; i < variableCount; i++)
+//     {
+//         for (int j = symbolTable[i].blockDepth; j > 1; j--)
+//         {
+//             fprintf(f, "\t");
+//         }
+//         fprintf(f, "%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
+//     }
 
-    fprintf(f, "\n");
-    fprintf(f, "DECLARED FUNCTIONS:");
+//     fprintf(f, "\n");
+//     fprintf(f, "DECLARED FUNCTIONS:");
 
-    for (int i = 0; i < functionIndex; i++)
-    {
-        fprintf(f, "%s\n", symTableFct[i].signature);
-    }
+//     for (int i = 0; i < functionIndex; i++)
+//     {
+//         fprintf(f, "%s\n", symTableFct[i].signature);
+//     }
 
-    fclose(f);
-}
+//     fclose(f);
+// }
 
 int checkFunction(char *sign)
 {
