@@ -9,7 +9,7 @@ struct SymbolTableBlock
     char symbolName[100];
     int scope;
     char reference[100];
-    char symbolStringValue[100];
+    char stringValue[100];
     int value;
 } symbolTable[100];
 
@@ -189,7 +189,19 @@ int printTable()
                         for(int k = 0; k < thisScope; k++){
                             printf("\t");
                         }
-                        printf("%s %s %d\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                        if(strcmp(symbolTable[j].symbolType, "char") == 0){
+                            printf("%s %s %c\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                        } else if (strcmp(symbolTable[j].symbolType, "int") == 0){
+                            printf("%s %s %d\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                        } else if (strcmp(symbolTable[j].symbolType, "string") == 0){
+                            printf("%s %s %s\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].stringValue);
+                        } else if(strcmp(symbolTable[j].symbolType, "bool") == 0){
+                            if(symbolTable[j].value){
+                                printf("%s %s true\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
+                            } else {
+                                printf("%s %s false\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
+                            }
+                        }
                     }
                 }
             }
