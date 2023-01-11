@@ -38,15 +38,16 @@ s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); pri
 progr     : declarations functions
           ;
 
-declarations   : structures globals
-               | structures
-               | globals
+declarations   : declarations declaration
+               | declaration
                |
                ;
 
-globals   : globals variable
-          | variable
-          ;
+declaration    : declaration variable
+               | declaration structure
+               | variable
+               | structure
+               ;
 
 variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | INTTYPE ID'.'                    { insert($1, $2, 0); }
@@ -57,20 +58,10 @@ variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | BOOLTYPE ID EQ TRUE'.'           { insert($1, $2, 1); }
           | BOOLTYPE ID EQ FALSE'.'          { insert($1, $2, 0); }
           | BOOLTYPE ID'.'                   { insert($1, $2, 0); }
-          | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }
-          | structure                        
+          | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }                        
           ;
 
-
-structures     : structures structure
-               | structure
-               ;
-
-structure      : STRUCTCALL ID { addRefference($2); } LBRACKET { increaseDepth(); } variableList { decreaseDepth(); removeRefference(); } RBRACKET
-               ;
-
-variableList   : variableList variable
-               | variable
+structure      : STRUCTCALL ID { addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
                ;
 
 atribute  : 
