@@ -69,16 +69,16 @@ void insert(char *type, char *id, int val)
         return;
     }
 
-    if (variableIndex(id) != -1)
-    {
-        printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
-        return;
-    }
+    // if (variableIndex(id) != -1)
+    // {
+    //     printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
+    //     return;
+    // }
 
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);
     symbolTable[variableCount].scope = curentDepth;
-    // strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
+    strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
     symbolTable[variableCount].value = val;
 
     variableCount++;
