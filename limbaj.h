@@ -82,7 +82,7 @@ void insert(char *type, char *id, int val)
 
     if (variableIndex(id) != -1)
     {
-        printf("VARIABLE %s %s HAS ALREADY BEEN DECLARED\n", type, id);
+        printf("VARIABLE %s HAS ALREADY BEEN DECLARED\n", id);
         return;
     }
 
@@ -91,6 +91,31 @@ void insert(char *type, char *id, int val)
     symbolTable[variableCount].scope = curentDepth;
     strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
     symbolTable[variableCount].value = val;
+
+    variableCount++;
+
+    return;
+}
+
+void insertString(char *id, char* val)
+{
+    if (variableCount == 100)
+    {
+        printf("MAXIMUM VARIABLE NUMBER\n");
+        return;
+    }
+
+    if (variableIndex(id) != -1)
+    {
+        printf("VARIABLE %s HAS ALREADY BEEN DECLARED\n", id);
+        return;
+    }
+
+    strcpy(symbolTable[variableCount].symbolType, "string");
+    strcpy(symbolTable[variableCount].symbolName, id);
+    symbolTable[variableCount].scope = curentDepth;
+    strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
+    strcpy(symbolTable[variableCount].stringValue, val);
 
     variableCount++;
 
@@ -194,7 +219,7 @@ int printTable()
                         } else if (strcmp(symbolTable[j].symbolType, "int") == 0){
                             printf("%s %s %d\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
                         } else if (strcmp(symbolTable[j].symbolType, "string") == 0){
-                            printf("%s %s %s\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].stringValue);
+                            printf("%s %s \"%s\"\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].stringValue);
                         } else if(strcmp(symbolTable[j].symbolType, "bool") == 0){
                             if(symbolTable[j].value){
                                 printf("%s %s true\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
