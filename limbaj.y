@@ -213,14 +213,14 @@ if   : IF depthAdd '(' conditii ')' body
      ;
 
 
-assignment     : DECL ID EQ NR'.' { updateVariableValue($2, $4); }
-               | DECL ID EQ CHARVAL'.'
-               | DECL ID EQ STRINGVAL'.'
-               | DECL ID EQ TRUE'.'
-               | DECL ID EQ FALSE'.'
-               | DECL ID EQ arraylist'.'
-               | DECL ID EQ operatie'.' 
-               | DECL ID EQ ID'.' { updateVariableId($2, $4); }
+assignment     : ID EQ NR'.' { updateVariableValue($2, $4); }
+               | ID EQ CHARVAL'.'
+               | ID EQ STRINGVAL'.'
+               | ID EQ TRUE'.'
+               | ID EQ FALSE'.'
+               | ID EQ arraylist'.'
+               | ID EQ operatie'.' 
+               | ID EQ ID'.' { updateVariableId($2, $4); }
                ;
 
 operatie  : plus
