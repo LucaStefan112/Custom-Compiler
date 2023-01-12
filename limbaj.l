@@ -22,13 +22,13 @@
 "||"                        { return LOGICALOR; }
 "#function"                 { return DECLF; }
 "#function_call"            { return FCALL; }
-"Eval"                      { return EVAL; }
 "#structure"                { return STRUCTTYPE; }
-"int"                       { yylval.dataType = strdup(yytext); return INTTYPE; } 
-"char"                      { yylval.dataType = strdup(yytext); return CHARTYPE; }
-"string"                    { yylval.dataType = strdup(yytext); return STRINGTYPE; }
-"bool"                      { yylval.dataType = strdup(yytext); return BOOLTYPE; }
-"array"                     { yylval.dataType = strdup(yytext); return ARRAYTYPE; }
+"Eval"                      { return EVAL; }
+"int"                       { yylval.dataType = strdup(yytext);return INTTYPE; } 
+"char"                      { yylval.dataType = strdup(yytext);return CHARTYPE; }
+"string"                    { yylval.dataType = strdup(yytext);return STRINGTYPE; }
+"bool"                      { yylval.dataType = strdup(yytext);return BOOLTYPE; }
+"array"                     { yylval.dataType = strdup(yytext);return ARRAYTYPE; }
 "{"                         { return LBRACKET; }
 "}"                         { return RBRACKET; }
 "true"                      { return TRUE; }
@@ -37,10 +37,10 @@
 "for"                       { return FOR; }
 "if"                        { return IF; }
 "else"                      { return ELSE; }
-\'.\'                       { yylval.charVal = yytext[1]; return CHARVAL; }
-\"[^\"]+\"                  { yylval.stringVal = strdup(yytext); return STRINGVAL; }
-[_a-zA-Z][_a-zA-Z0-9]*      { yylval.strVal = strdup(yytext); return ID; }
-0|[1-9][0-9]*|[+-][1-9][0-9]* { yylval.intVal = atoi(yytext); return NR; }
+\'.\'                       { yylval.charVal = yytext[1];return CHARVAL; }
+\"[^\"]+\"                  { yylval.stringVal = strdup(yytext);return STRINGVAL; }
+[_a-zA-Z][_a-zA-Z0-9]*      { yylval.strVal = strdup(yytext);return ID; }
+0|[1-9][0-9]*|[+-][1-9][0-9]* { yylval.intVal = atoi(yytext);return NR; }
 [ \t] ;
 \n { yylineno++; }
 . { return yytext[0]; }
