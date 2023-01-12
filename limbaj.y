@@ -157,8 +157,8 @@ blockInstruction    : variable
                     | TYPEOF '('NR')''.'          { printf("The type of %s is: INT\n", $3); }
                     | TYPEOF '('CHARVAL')''.'     { printf("The type of %s is: CHAR\n", $3); }
                     | TYPEOF '('STRINGVAL')''.'   { printf("The type of %s is: STRING\n", $3); }
-                    | TYPEOF '('TRUE')''.'        { printf("The type of %s is: BOOL\n", $3); }
-                    | TYPEOF '('FALSE')''.'       { printf("The type of %s is: BOOL\n", $3); }
+                    | TYPEOF '('TRUE')''.'        { printf("The type of input is: BOOL\n"); }
+                    | TYPEOF '('FALSE')''.'       { printf("The type of input is: BOOL\n"); }
                     ;
 
 while     : WHILE { increaseDepth(); } '(' conditii ')' body
