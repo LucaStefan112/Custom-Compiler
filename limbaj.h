@@ -294,30 +294,73 @@ int printTable()
     }
 }
 
-// void write()
-// {
-//     FILE *f = fopen("symbol_table.txt", "w");
-//     fprintf(f, "DECLARED VARIABLE:");
+void writeTable()
+{
+    FILE *f = fopen("output.txt", "w");
 
-//     for (int i = 0; i < variableCount; i++)
-//     {
-//         for (int j = symbolTable[i].blockDepth; j > 1; j--)
-//         {
-//             fprintf(f, "\t");
-//         }
-//         fprintf(f, "%s %s %d\n", symbolTable[i].symbolType, symbolTable[i].symbolName, symbolTable[i].value);
-//     }
+    int vizitat[100];
 
-//     fprintf(f, "\n");
-//     fprintf(f, "DECLARED FUNCTIONS:");
+    for (int i = 0; i < variableCount; i++)
+    {
+        vizitat[i] = 0;
+    }
 
-//     for (int i = 0; i < functionIndex; i++)
-//     {
-//         fprintf(f, "%s\n", symTableFct[i].signature);
-//     }
+    fprintf(f, "\nSymbol table:\n");
 
-//     fclose(f);
-// }
+    for(int i = 0; i < variableCount; i++){
+        if(!vizitat[i]){
+            char thisRefference[100];
+            int thisScope = symbolTable[i].scope;
+            strcpy(thisRefference, symbolTable[i].refference);
+            if(strcmp(thisRefference, "global") == 0){
+                fprintf(f, "global:\n");
+            }
+            for(int k = 0; k < thisScope - 1; k++){
+                fprintf(f, "\t");
+            }
+            for(int j = 0; j < variableCount; j++){
+                if(!vizitat[j]){
+                    if(symbolTable[j].scope == thisScope && !strcmp(symbolTable[j].refference, thisRefference)){
+                        vizitat[j] = 1;
+                        for(int k = 0; k < thisScope; k++){
+                            fprintf(f, "\t");
+                        }
+                        if(strcmp(symbolTable[j].symbolType, "char") == 0){
+                            fprintf(f, "%s %s '%c'\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                        } else if (strcmp(symbolTable[j].symbolType, "int") == 0){
+                            fprintf(f, "%s %s %d", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+
+                        } else if (strcmp(symbolTable[j].symbolType, "string") == 0){
+
+                            fprintf(f, "%s %s \"%s\"\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].stringValue);
+                        } else if(strcmp(symbolTable[j].symbolType, "bool") == 0){
+                            if(symbolTable[j].value){
+                                fprintf(f, "%s %s true\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
+                            } else {
+                                fprintf(f, "%s %s false\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
+                            }
+                        } else if(strcmp(symbolTable[j].symbolType, "structure") == 0){
+                            fprintf(f, "%s %s\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
+                            thisScope++;
+                            strcpy(thisRefference, symbolTable[j].symbolName);
+                            j = -1;
+                            continue;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    fprintf(f, "\n");
+    for (int i = 0; i < functionIndex; i++)
+    {
+        fprintf(f, "%s", symTableFct[i].signature);
+    }
+    fclose(f);
+}
+
 
 int checkFunction(char *sign)
 {
