@@ -152,7 +152,7 @@ blockInstruction    : variable
                          if (i == -1)
                               printf("Variable %s is not declared\n", $3);
                          else
-                              printf("The type of %s is : %s", $3, getTypeOf($3));
+                              printf("The type of %s is : %s\n", $3, getTypeOf($3));
                          }
                     | TYPEOF '('NR')''.'          { printf("The type of %s is: INT\n", $3); }
                     | TYPEOF '('CHARVAL')''.'     { printf("The type of %s is: CHAR\n", $3); }
