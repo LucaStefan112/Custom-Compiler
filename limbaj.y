@@ -228,7 +228,6 @@ logicalOp : LOGICALAND
 conditie  : TRUE
           | FALSE
           | NR boolOp NR
-          | NR boolOp ID
           | ID boolOp NR
           | NR boolOp ID
           | ID boolOp ID
