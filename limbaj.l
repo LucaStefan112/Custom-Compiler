@@ -22,13 +22,13 @@
 "||"                        { return LOGICALOR; }
 "#function"                 { return DECLF; }
 "#function_call"            { return FCALL; }
-"#structure"                { return STRUCTTYPE; }
 "Eval"                      { return EVAL; }
 "int"                       { yylval.dataType = strdup(yytext);return INTTYPE; } 
 "char"                      { yylval.dataType = strdup(yytext);return CHARTYPE; }
 "string"                    { yylval.dataType = strdup(yytext);return STRINGTYPE; }
 "bool"                      { yylval.dataType = strdup(yytext);return BOOLTYPE; }
 "array"                     { yylval.dataType = strdup(yytext);return ARRAYTYPE; }
+"struct"                    { yylval.dataType = strdup(yytext);return STRUCTTYPE;}
 "{"                         { return LBRACKET; }
 "}"                         { return RBRACKET; }
 "true"                      { return TRUE; }

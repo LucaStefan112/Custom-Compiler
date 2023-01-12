@@ -19,8 +19,8 @@ extern char* yytext;
   char *stringVal;
 }
 
-%token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ STRUCTTYPE
-%token <dataType> INTTYPE BOOLTYPE STRINGTYPE ARRAYTYPE CHARTYPE
+%token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ
+%token <dataType> INTTYPE BOOLTYPE STRINGTYPE ARRAYTYPE CHARTYPE STRUCTTYPE
 %token <intVal> NR
 %token <charVal> CHARVAL
 %token <stringVal> STRINGVAL
@@ -63,7 +63,7 @@ variable  : INTTYPE ID EQ NR'.'              { insert($1, $2, $4); }
           | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }                        
           ;
 
-structure      : STRUCTTYPE ID { insert("structure", $2, 0); addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
+structure      : STRUCTTYPE ID { insert($1, $2, 0); addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
                ;
 
 atribute  : 
