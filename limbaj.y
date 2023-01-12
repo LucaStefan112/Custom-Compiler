@@ -63,7 +63,7 @@ variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }                        
           ;
 
-structure      : STRUCTCALL ID { insert("structure", $2); addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
+structure      : STRUCTCALL ID { insert("structure", $2, 0); addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
                ;
 
 atribute  : 
