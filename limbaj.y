@@ -33,7 +33,7 @@ extern char* yytext;
 %left MUL DIV MOD
 %%
 
-s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); printTable(); /*write();*/}
+s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); printTable(); write();}
 
 progr     : progr declarations 
           | progr functions
@@ -192,7 +192,7 @@ e    : e PLUS e     {$$=$1+$3; }
      | ID EQ NR
           { 
                int i = variableIndex($1); 
-               
+
                if(i != -1 && (strcmp(symbolTable[i].symbolType, "int") == 0 || strcmp(symbolTable[i].symbolType, "bool") == 0 || strcmp(symbolTable[i].symbolType, "char") == 0)){ 
                     updateVariableValue($1, $3);
                     $$ =  symbolTable[i].value ;
