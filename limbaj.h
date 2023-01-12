@@ -8,7 +8,7 @@ struct SymbolTableBlock
     char symbolType[100];
     char symbolName[100];
     int scope;
-    char reference[100];
+    char refference[100];
     char stringValue[100];
     int value;
 } symbolTable[100];
@@ -63,7 +63,7 @@ int variableIndex(char *variable)
 {
     for (int i = 0; i < variableCount; i++)
     {
-        if(symbolTable[i].scope == curentDepth && !strcmp(symbolTable[i].reference, currentRefference[curentDepth]) && !strcmp(symbolTable[i].symbolName, variable))
+        if(symbolTable[i].scope == curentDepth && !strcmp(symbolTable[i].refference, currentRefference[curentDepth]) && !strcmp(symbolTable[i].symbolName, variable))
         {
             return i;
         }
@@ -89,7 +89,7 @@ void insert(char *type, char *id, int val)
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);
     symbolTable[variableCount].scope = curentDepth;
-    strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
+    strcpy(symbolTable[variableCount].refference, currentRefference[curentDepth]);
     symbolTable[variableCount].value = val;
 
     variableCount++;
@@ -114,7 +114,7 @@ void insertString(char *id, char* val)
     strcpy(symbolTable[variableCount].symbolType, "string");
     strcpy(symbolTable[variableCount].symbolName, id);
     symbolTable[variableCount].scope = curentDepth;
-    strcpy(symbolTable[variableCount].reference, currentRefference[curentDepth]);
+    strcpy(symbolTable[variableCount].refference, currentRefference[curentDepth]);
     strcpy(symbolTable[variableCount].stringValue, val + 1);
     symbolTable[variableCount].stringValue[strlen(symbolTable[variableCount].stringValue) - 1] = '\0';
 
@@ -278,7 +278,7 @@ int printTable()
         if(!vizitat[i]){
             char thisRefference[100];
             int thisScope = symbolTable[i].scope;
-            strcpy(thisRefference, symbolTable[i].reference);
+            strcpy(thisRefference, symbolTable[i].refference);
             if(strcmp(thisRefference, "global") == 0){
                 printf("global:\n");
             }
@@ -287,7 +287,7 @@ int printTable()
             }
             for(int j = 0; j < variableCount; j++){
                 if(!vizitat[j]){
-                    if(symbolTable[j].scope == thisScope && !strcmp(symbolTable[j].reference, thisRefference)){
+                    if(symbolTable[j].scope == thisScope && !strcmp(symbolTable[j].refference, thisRefference)){
                         vizitat[j] = 1;
                         for(int k = 0; k < thisScope; k++){
                             printf("\t");

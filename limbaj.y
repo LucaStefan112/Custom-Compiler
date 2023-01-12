@@ -51,31 +51,23 @@ declaration    : variable
                | structure
                ;
 
-variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
+variable  : INTTYPE ID EQ NR'.'              { insert($1, $2, $4); }
+          | INTTYPE ID EQ EVAL '(' exp ')''.'{ insert($1, $2, $6); }
           | INTTYPE ID'.'                    { insert($1, $2, 0); }
           | CHARTYPE ID EQ CHARVAL'.'        { insert($1, $2, $4); }
+          | CHARTYPE ID EQ EVAL '(' exp ')''.'{ insert($1, $2, $6); }
           | CHARTYPE ID'.'                   { insert($1, $2, 0); }
           | STRINGTYPE ID EQ STRINGVAL'.'    { insertString($2, $4); }
           | STRINGTYPE ID'.'                 { insertString($2, ""); }
           | BOOLTYPE ID EQ TRUE'.'           { insert($1, $2, 1); }
           | BOOLTYPE ID EQ FALSE'.'          { insert($1, $2, 0); }
+          | BOOLTYPE ID EQ EVAL '(' exp ')''.'{ insert($1, $2, $6); }
           | BOOLTYPE ID'.'                   { insert($1, $2, 0); }
           | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }                        
           ;
 
 structure      : STRUCTCALL ID { insert("structure", $2, 0); addRefference($2); } LBRACKET { increaseDepth(); } declarations { decreaseDepth(); removeRefference(); } RBRACKET
                ;
-
-atribute  : 
-          | FCALL  EVAL '(' exp ')'
-          | FCALL ID '(' callInstructions ')'  
-               {    
-                    insertName($2);
-                         if (checkIdentity($2)==0)
-                              printf("The types of the called function do not match with the declared types for %s \n", $2);
-               }
-          | INTTYPE EVAL '(' exp ')'
-          ;
 
 arraylist : '['']'
           | '['list']'
@@ -102,7 +94,6 @@ function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunct
           | DECLF CHARTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
           | DECLF BOOLTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
           | DECLF STRINGTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF INTTYPE EVAL '(' exp ')'
           | FCALL ID '(' callInstructions')' 
                {    
                     insertName($2);
@@ -145,10 +136,10 @@ e    : e PLUS e   {$$=$1+$3; }
      | e MUL e   {$$=$1*$3; }
      | e DIV e   {$$=$1/$3; }
      | NR {$$=$1; }
-     | INTTYPE ID EQ NR'.' 
+     | ID EQ NR
           { 
-               int i; 
-               if((i=variableIndex($2)) != -1){ 
+               int i = variableIndex($2); 
+               if(i != -1 && (strcmp(symbolTable[i].type, "int") == 0 || strcmp(symbolTable[i].type, "bool") == 0 || strcmp(symbolTable[i].type, "char") == 0)){ 
                     updateVariableValue($2, $4);
                     $$ =  symbolTable[i].value ;
                } else {
@@ -157,11 +148,14 @@ e    : e PLUS e   {$$=$1+$3; }
                     exit(0);
                }
           }
-     | INTTYPE ID'.'
+     | ID
           { 
-               int i;
-               if((i=variableIndex($2)) != -1) {   
+               int i = variableIndex($2);
+               if(i != -1 && (strcmp(symbolTable[i].type, "int") == 0 || strcmp(symbolTable[i].type, "bool") == 0 || strcmp(symbolTable[i].type, "char") == 0)){  
                     $$= symbolTable[i].value;
+               } else if(i != -1 && (strcmp(symbolTable[i].type, "structure") == 0 || strcmp(symbolTable[i].type, "string") == 0)){
+                    printf("Error: argument for Eval is not valid!\n");
+                    exit(1);
                } else {
                     printf("Variable doesn't exist\n"); 
                     printf("Error: argument for Eval is not valid!\n");
@@ -193,7 +187,7 @@ blockInstruction    : variable
 while     : WHILE { increaseDepth(); } '(' conditii ')' body
           ;
 
-for  : FOR { increaseDepth(); } '(' assignment conditii '.' assignment ')' body
+for  : FOR { increaseDepth(); } '(' assignment '.' conditii '.' assignment ')' body
      ;
 
 if   : IF { increaseDepth(); } '(' conditii ')' body
