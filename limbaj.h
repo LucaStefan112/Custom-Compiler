@@ -328,7 +328,7 @@ void writeTable()
                         if(strcmp(symbolTable[j].symbolType, "char") == 0){
                             fprintf(f, "%s %s '%c'\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
                         } else if (strcmp(symbolTable[j].symbolType, "int") == 0){
-                            fprintf(f, "%s %s %d", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
+                            fprintf(f, "%s %s %d\n", symbolTable[j].symbolType, symbolTable[j].symbolName, symbolTable[j].value);
 
                         } else if (strcmp(symbolTable[j].symbolType, "string") == 0){
 
@@ -356,9 +356,9 @@ void writeTable()
     fprintf(f, "\n");
     for (int i = 0; i < functionIndex; i++)
     {
-        fprintf(f, "%s", symTableFct[i].signature);
+        fprintf(f, "%s\n", symTableFct[i].signature);
     }
-    
+
     fclose(f);
 }
 
