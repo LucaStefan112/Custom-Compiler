@@ -53,9 +53,9 @@ declaration    : variable
 
 variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | INTTYPE ID'.'                    { insert($1, $2, 0); }
-          | CHARTYPE ID EQ CHARVAL'.'       { insert($1, $2, $4); }
+          | CHARTYPE ID EQ CHARVAL'.'        { insert($1, $2, $4); }
           | CHARTYPE ID'.'                   { insert($1, $2, 0); }
-          | STRINGTYPE ID EQ STRINGVAL'.'   { insertString($2, $4); }
+          | STRINGTYPE ID EQ STRINGVAL'.'    { insertString($2, $4); }
           | STRINGTYPE ID'.'                 { insertString($2, ""); }
           | BOOLTYPE ID EQ TRUE'.'           { insert($1, $2, 1); }
           | BOOLTYPE ID EQ FALSE'.'          { insert($1, $2, 0); }

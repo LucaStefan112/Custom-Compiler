@@ -74,6 +74,8 @@ int variableIndex(char *variable)
 
 void insert(char *type, char *id, int val)
 {
+    printf("INSERTING %s %s", type, id);
+
     if (variableCount == 100)
     {
         printf("MAXIMUM VARIABLE NUMBER\n");
