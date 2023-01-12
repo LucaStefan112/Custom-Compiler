@@ -214,13 +214,8 @@ void updateVariableWithVariable(char *dest, char* source)
         exit(0);
     }
 
-    if (strcmp(symbolTable[destIndex].symbolType, "string") == 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") != 0) {
-        printf("CAN'T PASS %s TO STRING\n", symbolTable[sourceIndex].symbolType);
-        exit(0);
-    }
-
-    if (strcmp(symbolTable[destIndex].symbolType, "string") != 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") == 0) {
-        printf("CAN'T PASS STRING TO %s\n", symbolTable[destIndex].symbolType);
+    if (strcmp(symbolTable[destIndex].symbolType, symbolTable[sourceIndex].symbolType) != 0) {
+        printf("CAN'T PASS %s TO %s\n", symbolTable[sourceIndex].symbolType, symbolTable[destIndex].symbolType);
         exit(0);
     }
 
