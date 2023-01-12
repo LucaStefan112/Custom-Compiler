@@ -18,6 +18,7 @@
 "-"                         { return MINUS; }
 "/"                         { return DIV; }
 "*"                         { return MUL; }
+"%"                         { return MOD; }
 "&&"                        { return LOGICALAND; }
 "||"                        { return LOGICALOR; }
 "#function"                 { return DECLF; }

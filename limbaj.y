@@ -11,12 +11,12 @@ extern char* yytext;
 
 %}
 %union {
-  int intVal; //value
-  char* dataType; // datatype
-  char* strVal; // ID
-  char *key;
-  char charVal;
-  char *stringVal;
+     int intVal; //value
+     char* dataType; // datatype
+     char* strVal; // ID
+     char *key;
+     char charVal;
+     char *stringVal;
 }
 
 %token LBRACKET RBRACKET TRUE FALSE EVAL WHILE FOR IF ELSE BOOLEQ BOOLGEQ BOOLLEQ BOOLNEQ LOGICALAND LOGICALOR  DECLF FCALL RETURN  BOOLGE BOOLLE EQ STRUCTCALL
@@ -30,7 +30,7 @@ extern char* yytext;
 
 %start s
 %left PLUS MINUS
-%left MUL DIV
+%left MUL DIV MOD
 %%
 
 s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); printTable(); /*write();*/}
@@ -52,16 +52,16 @@ declaration    : variable
                ;
 
 variable  : INTTYPE ID EQ NR'.'              { insert($1, $2, $4); }
-          | INTTYPE ID EQ EVAL '(' exp ')''.'{ insert($1, $2, $6); }
+          | INTTYPE ID EQ exp'.'             { insert($1, $2, $4); }
           | INTTYPE ID'.'                    { insert($1, $2, 0); }
           | CHARTYPE ID EQ CHARVAL'.'        { insert($1, $2, $4); }
-          | CHARTYPE ID EQ EVAL '(' exp ')''.'{ insert($1, $2, $6); }
+          | CHARTYPE ID EQ exp'.'            { insert($1, $2, $4); }
           | CHARTYPE ID'.'                   { insert($1, $2, 0); }
           | STRINGTYPE ID EQ STRINGVAL'.'    { insertString($2, $4); }
           | STRINGTYPE ID'.'                 { insertString($2, ""); }
           | BOOLTYPE ID EQ TRUE'.'           { insert($1, $2, 1); }
           | BOOLTYPE ID EQ FALSE'.'          { insert($1, $2, 0); }
-          | BOOLTYPE ID EQ EVAL '(' exp ')''.'{ insert($1, $2, $6); }
+          | BOOLTYPE ID EQ exp'.'            { insert($1, $2, $4); }
           | BOOLTYPE ID'.'                   { insert($1, $2, 0); }
           | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }                        
           ;
@@ -128,14 +128,67 @@ declInstruction     : INTTYPE ID    {  insertTEMP($1); insertIntoParamArray($1);
                     | BOOLTYPE ID   {  insertTEMP($1); insertIntoParamArray($1);}
                     ;
 
+body      : LBRACKET blockInstructions RETURN bodyEnd
+          | LBRACKET blockInstructions bodyEnd
+          | LBRACKET RBRACKET
+          ;
+
+bodyEnd   : RBRACKET { decreaseDepth(); }
+          ;
+
+blockInstructions   : blockInstructions blockInstruction 
+                    | blockInstruction
+                    ;
+
+blockInstruction    : variable
+                    | assignment
+                    | while
+                    | for
+                    | if
+                    | if else
+                    | EVAL '('exp')''.'
+                    ;
+
+while     : WHILE { increaseDepth(); } '(' conditii ')' body
+          ;
+
+for  : FOR { increaseDepth(); } '(' assignment '.' conditii '.' assignment ')' body
+     ;
+
+if   : IF { increaseDepth(); } '(' conditii ')' body
+     ;
+
+else : ELSE { increaseDepth(); } body
+     ;
+
+
+assignment     : ID EQ NR'.'       { updateVariableValue($1, $3); }
+               | ID EQ CHARVAL'.'  { updateVariableValue($1, $3); }
+               | ID EQ STRINGVAL'.'{ updateVariableStringValue($1, $3); }
+               | ID EQ TRUE'.'     { updateVariableValue($1, 1); }
+               | ID EQ FALSE'.'    { updateVariableValue($1, 0); }
+               | ID EQ arraylist'.'
+               | ID EQ exp'.' 
+               | ID EQ ID'.'       { updateVariableWithVariable($1, $3); }
+               ;
+
 exp       : e  {$$=$1; printf("Valoarea expresiei este %d\n",$$);} 
           ;
 
-e    : e PLUS e   {$$=$1+$3; }
-     | e MINUS e   {$$=$1-$3; }
-     | e MUL e   {$$=$1*$3; }
-     | e DIV e   {$$=$1/$3; }
-     | NR {$$=$1; }
+e    : e PLUS e     {$$=$1+$3; }
+     | e MINUS e    {$$=$1-$3; }
+     | e MUL e      {$$=$1*$3; }
+     | e DIV e      {$$=$1/$3; }
+     | e MOD e      {$$=$1%$3; }
+     | '('e PLUS e')'{$$=$2+$4; }
+     | '('e MINUS e')'{$$=$2-$4; }
+     | '('e MUL e')'{$$=$2*$4; }
+     | '('e DIV e')'{$$=$2/$4; }
+     | '('e MOD e')'{$$=$2%$4; }
+     | CHARVAL      {$$=$1; }
+     | NR           {$$=$1; }
+     | TRUE         {$$=1; }
+     | FALSE        {$$=0; }
      | ID EQ NR
           { 
                int i = variableIndex($1); 
@@ -164,75 +217,6 @@ e    : e PLUS e   {$$=$1+$3; }
           }
      ;
 
-body      : LBRACKET blockInstructions RETURN bodyEnd
-          | LBRACKET blockInstructions bodyEnd
-          | LBRACKET RBRACKET
-          ;
-
-bodyEnd   : RBRACKET { decreaseDepth(); }
-          ;
-
-blockInstructions   : blockInstructions blockInstruction 
-                    | blockInstruction
-                    ;
-
-blockInstruction    : variable
-                    | assignment
-                    | while
-                    | for
-                    | if
-                    | if else
-                    ;
-
-while     : WHILE { increaseDepth(); } '(' conditii ')' body
-          ;
-
-for  : FOR { increaseDepth(); } '(' assignment '.' conditii '.' assignment ')' body
-     ;
-
-if   : IF { increaseDepth(); } '(' conditii ')' body
-     ;
-
-else : ELSE { increaseDepth(); } body
-     ;
-
-
-assignment     : ID EQ NR'.'       { updateVariableValue($1, $3); }
-               | ID EQ CHARVAL'.'  { updateVariableValue($1, $3); }
-               | ID EQ STRINGVAL'.'{ updateVariableStringValue($1, $3); }
-               | ID EQ TRUE'.'     { updateVariableValue($1, 1); }
-               | ID EQ FALSE'.'    { updateVariableValue($1, 0); }
-               | ID EQ arraylist'.'
-               | ID EQ operatie'.' 
-               | ID EQ ID'.'       { updateVariableWithVariable($1, $3); }
-               ;
-
-operatie  : plus
-          | minus
-          | mul
-          | div
-          ;
-
-plus : ID PLUS ID { checkDeclaration($1); checkDeclaration($3); }
-     | ID PLUS NR { checkDeclaration($1);}
-     | NR PLUS ID { checkDeclaration($3);}
-     ;
-
-minus     : ID MINUS ID { checkDeclaration($1); checkDeclaration($3); }
-          | ID MINUS NR { checkDeclaration($1);}
-          | NR MINUS ID { checkDeclaration($3);}
-          ;
-
-mul  : ID MUL ID { checkDeclaration($1); checkDeclaration($3); }
-     | ID MUL NR { checkDeclaration($1);}
-     | NR MUL ID { checkDeclaration($3);}
-     ;
-
-div  : ID DIV ID { checkDeclaration($1); checkDeclaration($3); }
-     | ID DIV NR { checkDeclaration($1);}
-     | NR DIV ID { checkDeclaration($3);}
-     ;
-
 conditii  : conditii logicalOp conditie
           | conditie
           ;
@@ -244,6 +228,7 @@ logicalOp : LOGICALAND
 conditie  : TRUE
           | FALSE
           | NR boolOp NR
+          | NR boolOp ID
           | ID boolOp NR
           | NR boolOp ID
           | ID boolOp ID
