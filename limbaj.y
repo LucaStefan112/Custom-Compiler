@@ -152,13 +152,13 @@ blockInstruction    : variable
                          if (i == -1)
                               printf("Variable %s is not declared\n", $3);
                          else
-                              printf("%s", getTypeOf($3));
+                              printf("The type of %s is : %s", $3, getTypeOf($3));
                          }
-                    | TYPEOF '('NR')''.'          { printf("INT"); }
-                    | TYPEOF '('CHARVAL')''.'     { printf("CHAR"); }
-                    | TYPEOF '('STRINGVAL')''.'   { printf("STRING"); }
-                    | TYPEOF '('TRUE')''.'        { printf("BOOL"); }
-                    | TYPEOF '('FALSE')''.'       { printf("BOOL"); }
+                    | TYPEOF '('NR')''.'          { printf("The type of %s is: INT\n", $3); }
+                    | TYPEOF '('CHARVAL')''.'     { printf("The type of %s is: CHAR\n", $3); }
+                    | TYPEOF '('STRINGVAL')''.'   { printf("The type of %s is: STRING\n", $3); }
+                    | TYPEOF '('TRUE')''.'        { printf("The type of %s is: BOOL\n", $3); }
+                    | TYPEOF '('FALSE')''.'       { printf("The type of %s is: BOOL\n", $3); }
                     ;
 
 while     : WHILE { increaseDepth(); } '(' conditii ')' body
