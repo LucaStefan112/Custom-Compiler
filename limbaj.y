@@ -48,10 +48,10 @@ declarations   : declarations declaration
                ;
 
 declaration    : variable
-               | structure
+               /* | structure */
                ;
 
-variable  : INTTYPE ID EQ NR'.'              { insert($1, $2, $4); }
+variable  : INTTYPE ID EQ NR'.'              { insert($1,$2,$4); }
           | INTTYPE ID'.'                    { insert($1, $2, 0); }
           | CHARTYPE ID EQ CHARVAL'.'        { insert($1, $2, $4); }
           | CHARTYPE ID'.'                   { insert($1, $2, 0); }
@@ -63,8 +63,8 @@ variable  : INTTYPE ID EQ NR'.'              { insert($1, $2, $4); }
           | ARRAYTYPE ID EQ arraylist'.'     { insert($1, $2, -1); }                        
           ;
 
-structure      : STRUCTCALL ID { insert($1, $2, 0); addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
-               ;
+/* structure      : STRUCTCALL ID { addRefference($2); } LBRACKET { increaseDepth(); } declaration { decreaseDepth(); removeRefference(); } RBRACKET
+               ; */
 
 atribute  : 
           | FCALL  EVAL '(' exp ')'
