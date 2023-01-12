@@ -73,7 +73,6 @@ int variableIndex(char *variable)
 
 void insert(char *type, char *id, int val)
 {
-    printf("%s %s %s\n", type, id, currentRefference[refferenceCount]);
     if (variableCount == 100)
     {
         printf("MAXIMUM VARIABLE NUMBER\n");
