@@ -358,6 +358,7 @@ void writeTable()
     {
         fprintf(f, "%s", symTableFct[i].signature);
     }
+    
     fclose(f);
 }
 

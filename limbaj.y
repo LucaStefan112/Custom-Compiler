@@ -33,7 +33,7 @@ extern char* yytext;
 %left MUL DIV MOD
 %%
 
-s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); printTable(); write();}
+s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); printTable(); writeTable();}
 
 progr     : progr declarations 
           | progr functions
