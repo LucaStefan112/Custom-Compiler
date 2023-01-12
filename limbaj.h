@@ -398,6 +398,19 @@ int insertFunction()
     memset(penru, 0, 200);
 }
 
+char* getTypeOf(char *name)
+{
+    for (int i = 0; i < variableCount; i++)
+    {
+        if (strcmp(symbolTable[i].symbolName, name) == 0)
+        {
+            return symbolTable[i].symbolType;
+        }
+    }
+
+    return "VOID";
+}
+
 void insertTEMP(char *ceva)
 {
     strcat(temp, ceva);

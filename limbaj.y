@@ -146,6 +146,19 @@ blockInstruction    : variable
                     | if
                     | if else
                     | EVAL '('exp')''.'
+                    | TYPEOF '('ID')''.'          { 
+                         int i = variableIndex($2);
+
+                         if (i == -1)
+                              printf("Variable %s is not declared\n", $2);
+                         else
+                              printf("%s", getTypeOf($2));
+                         }
+                    | TYPEOF '('NR')''.'          { printf("INT"); }
+                    | TYPEOF '('CHARVAL')''.'     { printf("CHAR"); }
+                    | TYPEOF '('STRINGVAL')''.'   { printf("STRING"); }
+                    | TYPEOF '('TRUE')''.'        { printf("BOOL"); }
+                    | TYPEOF '('FALSE')''.'       { printf("BOOL"); }
                     ;
 
 while     : WHILE { increaseDepth(); } '(' conditii ')' body
