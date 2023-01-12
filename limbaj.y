@@ -35,17 +35,19 @@ extern char* yytext;
 
 s: { initialize(); } progr {printf ("Language is syntactically correct.\n"); printTable(); /*write();*/}
 
-progr     : declarations functions
+progr     : progr declarations 
+          | progr functions
+          | progr blockInstructions
+          | declarations
+          | functions
+          | blockInstructions
           ;
 
 declarations   : declarations declaration
                | declaration
-               |
                ;
 
-declaration    : declaration variable
-               | declaration structure
-               | variable
+declaration    : variable
                | structure
                ;
 
