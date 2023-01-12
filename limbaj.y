@@ -147,12 +147,12 @@ blockInstruction    : variable
                     | if else
                     | EVAL '('exp')''.'
                     | TYPEOF '('ID')''.'          { 
-                         int i = variableIndex($2);
+                         int i = variableIndex($3);
 
                          if (i == -1)
-                              printf("Variable %s is not declared\n", $2);
+                              printf("Variable %s is not declared\n", $3);
                          else
-                              printf("%s", getTypeOf($2));
+                              printf("%s", getTypeOf($3));
                          }
                     | TYPEOF '('NR')''.'          { printf("INT"); }
                     | TYPEOF '('CHARVAL')''.'     { printf("CHAR"); }
