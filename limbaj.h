@@ -77,13 +77,13 @@ void insert(char *type, char *id, int val)
     if (variableCount == 100)
     {
         printf("MAXIMUM VARIABLE NUMBER\n");
-        return;
+        exit();
     }
 
     if (variableIndex(id) != -1)
     {
         printf("VARIABLE %s HAS ALREADY BEEN DECLARED\n", id);
-        return;
+        exit();
     }
 
     strcpy(symbolTable[variableCount].symbolType, type);
@@ -102,13 +102,13 @@ void insertString(char *id, char* val)
     if (variableCount == 100)
     {
         printf("MAXIMUM VARIABLE NUMBER\n");
-        return;
+        exit();
     }
 
     if (variableIndex(id) != -1)
     {
         printf("VARIABLE %s HAS ALREADY BEEN DECLARED\n", id);
-        return;
+        exit();
     }
 
     strcpy(symbolTable[variableCount].symbolType, "string");
@@ -129,18 +129,18 @@ int checkDeclaration(char *id)
     if ((idIndex = variableIndex(id)) == -1)
     {
         printf("VARIABLE %s DOES NOT EXIST\n", id);
-        return 0;
+        exit();
     }
 
     if (strcmp(symbolTable[idIndex].symbolType, "int") != 0)
     {
         printf("VARIABLE %s IS NOT INTEGER\n", id);
-        return -1;
+        exit();
 
         if (symbolTable[idIndex].value == INT_MAX)
         {
             printf("VARIABLE %s HAS NOT BEEN INITIALIZED\n", id);
-            return -1;
+            exit();
         }
     }
     return 1;
@@ -153,13 +153,13 @@ void updateVariableValue(char *dest, int value)
     if (destIndex == -1)
     {
         printf("VARIABLE %s DOES NOT EXIST\n", dest);
-        return;
+        exit();
     }
 
     if (strcmp(symbolTable[destIndex].symbolType, "string") == 0)
     {
         printf("CAN'T PASS VALUE %d TO STRING\n", value);
-        return;
+        exit();
     }
 
     if(strcmp(symbolTable[destIndex].symbolType, "char") == 0) {
@@ -170,7 +170,7 @@ void updateVariableValue(char *dest, int value)
         symbolTable[destIndex].value = value;
     } else {
         printf("VARIABLE %s IS NOT DEFAULT TYPE\n", dest);
-        return;
+        exit();
     }
 
     return;
@@ -183,13 +183,13 @@ void updateVariableStringValue(char *dest, char* value)
     if (destIndex == -1)
     {
         printf("VARIABLE %s DOES NOT EXIST\n", dest);
-        return;
+        exit();
     }
 
     if (strcmp(symbolTable[destIndex].symbolType, "string") != 0)
     {
         printf("CAN'T PASS STRING TO %s\n", symbolTable[destIndex].symbolType);
-        return;
+        exit();
     }
 
     strcpy(symbolTable[destIndex].stringValue, value + 1);
@@ -206,25 +206,23 @@ void updateVariableWithVariable(char *dest, char* source)
     if (destIndex == -1)
     {
         printf("VARIABLE %s DOES NOT EXIST\n", dest);
-        return;
+        exit();
     }
 
     if (sourceIndex == -1)
     {
         printf("VARIABLE %s DOES NOT EXIST\n", source);
-        return;
+        exit();
     }
-
-    // check if source is string and dest is not or dest is string and source is not
 
     if (strcmp(symbolTable[destIndex].symbolType, "string") == 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") != 0) {
         printf("CAN'T PASS %s TO STRING\n", symbolTable[sourceIndex].symbolType);
-        return;
+        exit();
     }
 
     if (strcmp(symbolTable[destIndex].symbolType, "string") != 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") == 0) {
         printf("CAN'T PASS STRING TO %s\n", symbolTable[destIndex].symbolType);
-        return;
+        exit();
     }
 
     if (strcmp(symbolTable[destIndex].symbolType, "string") == 0 && strcmp(symbolTable[sourceIndex].symbolType, "string") == 0) {
@@ -234,33 +232,6 @@ void updateVariableWithVariable(char *dest, char* source)
     }
 
     return;
-}
-
-int updateVariableId(char *dest, char *source)
-{
-    int sourceIndex, destIndex;
-
-    if ((sourceIndex = variableIndex(source)) == -1 || (destIndex = variableIndex(dest)) == -1)
-    {
-        printf("VARIABLE %s DOES NOT EXISTS\n", source);
-        return -1;
-    }
-
-    if (strcmp(symbolTable[sourceIndex].symbolType, "int") != 0)
-    {
-        printf("VARIABLE %s IS NOT INTEGER\n", dest);
-        return -1;
-
-        if (symbolTable[sourceIndex].value == INT_MAX)
-        {
-            printf("VARIABLE %s HAS NOT BEEN INITIALIZED\n", dest);
-            return -1;
-        }
-    }
-
-    symbolTable[destIndex].value = symbolTable[sourceIndex].value;
-
-    return 0;
 }
 
 int printTable()
