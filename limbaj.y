@@ -26,7 +26,7 @@ extern char* yytext;
 %token <stringVal> STRINGVAL
 %token <strVal> ID
 
-%type <intVal> exp e 
+%type <intVal> exp e body functionBody function
 
 %start s
 %left PLUS MINUS
@@ -87,13 +87,12 @@ listval   : NR
 
 functions : functions  function
           | function
-          |
           ;
 
-function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF CHARTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF BOOLTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
-          | DECLF STRINGTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; } 
+          | DECLF CHARTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; }
+          | DECLF BOOLTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; }
+          | DECLF STRINGTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; }
           | FCALL ID '(' callInstructions')' 
                {    
                     insertName($2);
@@ -102,8 +101,8 @@ function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunct
                }
           ;
 
-functionBody   : '(' declInstructions ')' body
-               | '(' ')' body
+functionBody   : '(' declInstructions ')' body { $$=$4;}
+               | '(' ')' body { $$=$3;}
                ;
 
 callInstructions    : callInstructions ',' callInstruction
@@ -128,9 +127,9 @@ declInstruction     : INTTYPE ID    {  insertTEMP($1); insertIntoParamArray($1);
                     | BOOLTYPE ID   {  insertTEMP($1); insertIntoParamArray($1);}
                     ;
 
-body      : LBRACKET blockInstructions RETURN bodyEnd
-          | LBRACKET blockInstructions bodyEnd
-          | LBRACKET RBRACKET
+body      : LBRACKET blockInstructions RETURN exp bodyEnd { $$=$4; }
+          | LBRACKET blockInstructions bodyEnd { $$=0; }
+          | LBRACKET RBRACKET { $$=0; }
           ;
 
 bodyEnd   : RBRACKET { decreaseDepth(); }
@@ -185,15 +184,12 @@ e    : e PLUS e     {$$=$1+$3; }
      | '('e MUL e')'{$$=$2*$4; }
      | '('e DIV e')'{$$=$2/$4; }
      | '('e MOD e')'{$$=$2%$4; }
-     | CHARVAL      {$$=$1; }
      | NR           {$$=$1; }
-     | TRUE         {$$=1; }
-     | FALSE        {$$=0; }
      | ID EQ NR
           { 
                int i = variableIndex($1); 
 
-               if(i != -1 && (strcmp(symbolTable[i].symbolType, "int") == 0 || strcmp(symbolTable[i].symbolType, "bool") == 0 || strcmp(symbolTable[i].symbolType, "char") == 0)){ 
+               if(i != -1 && strcmp(symbolTable[i].symbolType, "int") == 0){ 
                     updateVariableValue($1, $3);
                     $$ =  symbolTable[i].value ;
                } else {

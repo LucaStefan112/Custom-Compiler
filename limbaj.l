@@ -25,6 +25,7 @@
 "#function_call"            { return FCALL; }
 "#structure"                { return STRUCTCALL; }
 "Eval"                      { return EVAL; }
+"TypeOf"                    { return TYPEOF; }
 "int"                       { yylval.dataType = strdup(yytext);return INTTYPE; } 
 "char"                      { yylval.dataType = strdup(yytext);return CHARTYPE; }
 "string"                    { yylval.dataType = strdup(yytext);return STRINGTYPE; }
