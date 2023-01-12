@@ -29,7 +29,7 @@
 "string"                    { yylval.dataType = strdup(yytext);return STRINGTYPE; }
 "bool"                      { yylval.dataType = strdup(yytext);return BOOLTYPE; }
 "array"                     { yylval.dataType = strdup(yytext);return ARRAYTYPE; }
-"struct"                    { yylval.dataType = strdup(yytext);return STRUCTTYPE;}
+"struct"                    { yylval.dataType = strdup(yytext);return STRINGTYPE;}
 "{"                         { return LBRACKET; }
 "}"                         { return RBRACKET; }
 "true"                      { return TRUE; }
