@@ -26,7 +26,7 @@ extern char* yytext;
 %token <stringVal> STRINGVAL
 %token <strVal> ID
 
-%type <intVal> exp e body functionBody function
+%type <intVal> exp e
 
 %start s
 %left PLUS MINUS
@@ -89,10 +89,10 @@ functions : functions  function
           | function
           ;
 
-function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; } 
-          | DECLF CHARTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; }
-          | DECLF BOOLTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; }
-          | DECLF STRINGTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); $$=$4; }
+function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); } 
+          | DECLF CHARTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF BOOLTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
+          | DECLF STRINGTYPE ID { increaseDepth(); } functionBody { insertIntoFunctionsignature($2); insertIntoFunctionsignature($3); insertIntoNameArray($3); insertFunction(); }
           | FCALL ID '(' callInstructions')' 
                {    
                     insertName($2);
@@ -101,8 +101,8 @@ function  : DECLF INTTYPE ID { increaseDepth(); } functionBody { insertIntoFunct
                }
           ;
 
-functionBody   : '(' declInstructions ')' body { $$=$4;}
-               | '(' ')' body { $$=$3;}
+functionBody   : '(' declInstructions ')' body
+               | '(' ')' body
                ;
 
 callInstructions    : callInstructions ',' callInstruction
@@ -127,9 +127,9 @@ declInstruction     : INTTYPE ID    {  insertTEMP($1); insertIntoParamArray($1);
                     | BOOLTYPE ID   {  insertTEMP($1); insertIntoParamArray($1);}
                     ;
 
-body      : LBRACKET blockInstructions RETURN exp bodyEnd { $$=$4; }
-          | LBRACKET blockInstructions bodyEnd { $$=0; }
-          | LBRACKET RBRACKET { $$=0; }
+body      : LBRACKET blockInstructions RETURN bodyEnd
+          | LBRACKET blockInstructions bodyEnd
+          | LBRACKET RBRACKET
           ;
 
 bodyEnd   : RBRACKET { decreaseDepth(); }
