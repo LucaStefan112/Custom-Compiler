@@ -138,9 +138,9 @@ e    : e PLUS e   {$$=$1+$3; }
      | NR {$$=$1; }
      | ID EQ NR
           { 
-               int i = variableIndex($2); 
+               int i = variableIndex($1); 
                if(i != -1 && (strcmp(symbolTable[i].type, "int") == 0 || strcmp(symbolTable[i].type, "bool") == 0 || strcmp(symbolTable[i].type, "char") == 0)){ 
-                    updateVariableValue($2, $4);
+                    updateVariableValue($1, $3);
                     $$ =  symbolTable[i].value ;
                } else {
                     printf("Variable doesn't exist\n"); 
@@ -150,7 +150,7 @@ e    : e PLUS e   {$$=$1+$3; }
           }
      | ID
           { 
-               int i = variableIndex($2);
+               int i = variableIndex($1);
                if(i != -1 && (strcmp(symbolTable[i].type, "int") == 0 || strcmp(symbolTable[i].type, "bool") == 0 || strcmp(symbolTable[i].type, "char") == 0)){  
                     $$= symbolTable[i].value;
                } else if(i != -1 && (strcmp(symbolTable[i].type, "structure") == 0 || strcmp(symbolTable[i].type, "string") == 0)){
