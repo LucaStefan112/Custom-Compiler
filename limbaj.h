@@ -27,13 +27,12 @@ struct SymbolTableElementFunction
 {
     char signature[450];
 } symTableFct[100];
-;
 
 int variableCount = 0, paramCount = 0, userCount = 0, userCallCount = 0, nameIndex = 0;
 
 char functionSignature[300], temp[100];
 
-int blockDepthCount[100], curentDepth = 0, functionIndex = 0;
+int blockDepthCount[100], currentDepth = 0, functionIndex = 0;
 
 void addRefference(char *refference)
 {
@@ -51,19 +50,19 @@ void initialize(){
 
 void increaseDepth()
 {
-    blockDepthCount[curentDepth++]++;
+    blockDepthCount[currentDepth++]++;
 }
 
 void decreaseDepth()
 {
-    curentDepth--;
+    currentDepth--;
 }
 
 int variableIndex(char *variable)
 {
     for (int i = 0; i < variableCount; i++)
     {
-        if(symbolTable[i].scope == curentDepth && !strcmp(symbolTable[i].refference, currentRefference[curentDepth]) && !strcmp(symbolTable[i].symbolName, variable))
+        if(symbolTable[i].scope == currentDepth && !strcmp(symbolTable[i].refference, currentRefference[refferenceCount]) && !strcmp(symbolTable[i].symbolName, variable))
         {
             return i;
         }
@@ -74,6 +73,7 @@ int variableIndex(char *variable)
 
 void insert(char *type, char *id, int val)
 {
+    printf("%s %s %s\n", type, id, currentRefference[refferenceCount]);
     if (variableCount == 100)
     {
         printf("MAXIMUM VARIABLE NUMBER\n");
@@ -88,8 +88,8 @@ void insert(char *type, char *id, int val)
 
     strcpy(symbolTable[variableCount].symbolType, type);
     strcpy(symbolTable[variableCount].symbolName, id);
-    symbolTable[variableCount].scope = curentDepth;
-    strcpy(symbolTable[variableCount].refference, currentRefference[curentDepth]);
+    symbolTable[variableCount].scope = currentDepth;
+    strcpy(symbolTable[variableCount].refference, currentRefference[refferenceCount]);
     symbolTable[variableCount].value = val;
 
     variableCount++;
@@ -113,8 +113,8 @@ void insertString(char *id, char* val)
 
     strcpy(symbolTable[variableCount].symbolType, "string");
     strcpy(symbolTable[variableCount].symbolName, id);
-    symbolTable[variableCount].scope = curentDepth;
-    strcpy(symbolTable[variableCount].refference, currentRefference[curentDepth]);
+    symbolTable[variableCount].scope = currentDepth;
+    strcpy(symbolTable[variableCount].refference, currentRefference[refferenceCount]);
     strcpy(symbolTable[variableCount].stringValue, val + 1);
     symbolTable[variableCount].stringValue[strlen(symbolTable[variableCount].stringValue) - 1] = '\0';
 
