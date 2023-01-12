@@ -139,7 +139,7 @@ e    : e PLUS e   {$$=$1+$3; }
      | ID EQ NR
           { 
                int i = variableIndex($1); 
-               if(i != -1 && (strcmp(symbolTable[i].type, "int") == 0 || strcmp(symbolTable[i].type, "bool") == 0 || strcmp(symbolTable[i].type, "char") == 0)){ 
+               if(i != -1 && (strcmp(symbolTable[i].symbolType, "int") == 0 || strcmp(symbolTable[i].symbolType, "bool") == 0 || strcmp(symbolTable[i].symbolType, "char") == 0)){ 
                     updateVariableValue($1, $3);
                     $$ =  symbolTable[i].value ;
                } else {
@@ -151,9 +151,9 @@ e    : e PLUS e   {$$=$1+$3; }
      | ID
           { 
                int i = variableIndex($1);
-               if(i != -1 && (strcmp(symbolTable[i].type, "int") == 0 || strcmp(symbolTable[i].type, "bool") == 0 || strcmp(symbolTable[i].type, "char") == 0)){  
+               if(i != -1 && (strcmp(symbolTable[i].symbolType, "int") == 0 || strcmp(symbolTable[i].symbolType, "bool") == 0 || strcmp(symbolTable[i].symbolType, "char") == 0)){  
                     $$= symbolTable[i].value;
-               } else if(i != -1 && (strcmp(symbolTable[i].type, "structure") == 0 || strcmp(symbolTable[i].type, "string") == 0)){
+               } else if(i != -1 && (strcmp(symbolTable[i].symbolType, "structure") == 0 || strcmp(symbolTable[i].symbolType, "string") == 0)){
                     printf("Error: argument for Eval is not valid!\n");
                     exit(1);
                } else {
