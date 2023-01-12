@@ -22,8 +22,8 @@
 "||"                        { return LOGICALOR; }
 "#function"                 { return DECLF; }
 "#function_call"            { return FCALL; }
-"#structure"                { return STRUCTCALL; }
 "Eval"                      { return EVAL; }
+"#structure"                { yylval.dataType = strdup(yytext);return STRUCTTYPE; }
 "int"                       { yylval.dataType = strdup(yytext);return INTTYPE; } 
 "char"                      { yylval.dataType = strdup(yytext);return CHARTYPE; }
 "string"                    { yylval.dataType = strdup(yytext);return STRINGTYPE; }
