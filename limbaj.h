@@ -281,10 +281,12 @@ int printTable()
             char thisRefference[100];
             int thisScope = symbolTable[i].scope;
             strcpy(thisRefference, symbolTable[i].reference);
+            if(strcmp(thisRefference, "global") == 0){
+                printf("global:\n");
+            }
             for(int k = 0; k < thisScope - 1; k++){
                 printf("\t");
             }
-            printf("%s:\n", thisRefference);
             for(int j = 0; j < variableCount; j++){
                 if(!vizitat[j]){
                     if(symbolTable[j].scope == thisScope && !strcmp(symbolTable[j].reference, thisRefference)){
@@ -304,6 +306,12 @@ int printTable()
                             } else {
                                 printf("%s %s false\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
                             }
+                        } else if(strcmp(symbolTable[j].symbolType, "structure") == 0){
+                            printf("%s %s\n", symbolTable[j].symbolType, symbolTable[j].symbolName);
+                            thisScope++;
+                            strcpy(thisRefference, symbolTable[j].symbolName);
+                            j = -1;
+                            continue;
                         }
                     }
                 }
